@@ -1,0 +1,58 @@
+name: deploy to staging - pull_request
+
+on:
+  pull_request:
+    types: [labeled]
+
+jobs:
+  deploy:
+    if: ${{ github.event.label.name == 'deploy to staging'}}
+    runs-on: ubuntu-20.04
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_PACKAGE_TOKEN }}
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_STG_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_STG_SECRET_ACCESS_KEY }}
+          aws-region: us-west-1
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@deliveryhero"
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn install:dependencies
+
+      - name: Build plugin for staging
+        run: yarn build:stg
+
+      - name: Deploy To Staging
+        env:
+          # TODO: add the bucket name
+          BUCKET_NAME: ""
+          # TODO: add the endpoint
+          S3_ENDPOINT: ""
+          # TODO: add the url
+          UPDATE_URL: ""
+          API_KEY_STG: ${{secrets.API_KEY_STG}}
+        run: yarn deploy -a ${API_KEY_STG} -e ${S3_ENDPOINT} -b ${BUCKET_NAME} -u ${UPDATE_URL}
+
+      - name: Remove Label After Deployment
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          github_token: ${{ secrets.GH_PACKAGE_TOKEN }}
+          labels: deploy to staging
