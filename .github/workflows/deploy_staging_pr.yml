@@ -42,10 +42,8 @@ jobs:
 
       - name: Deploy To Staging
         env:
-          # TODO: add the bucket name
-          BUCKET_NAME: ""
-          # TODO: add the endpoint
-          S3_ENDPOINT: ""
+          BUCKET_NAME: "ops-portal-billing-view-staging"
+          S3_ENDPOINT: "http://ops-portal-billing-view-staging.s3-website.eu-central-1.amazonaws.com"
           # TODO: add the url
           UPDATE_URL: ""
           API_KEY_STG: ${{secrets.API_KEY_STG}}

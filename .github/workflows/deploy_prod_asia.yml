@@ -40,10 +40,8 @@ jobs:
 
       - name: Deploy To Production
         env:
-          # TODO: add the bucket name
-          BUCKET_NAME: ""
-          # TODO: add the endpoint
-          S3_ENDPOINT: ""
+          BUCKET_NAME: "ops-portal-billing-view-prod-asia"
+          S3_ENDPOINT: "http://ops-portal-billing-view-prod-asia.s3-website-ap-southeast-1.amazonaws.com"
           # TODO: add the url
           UPDATE_URL: ""
           API_KEY_ASIA: ${{secrets.API_KEY_ASIA}}
