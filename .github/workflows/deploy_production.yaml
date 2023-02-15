@@ -1,0 +1,61 @@
+name: deploy to production
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      STS_KEY: ${{ secrets.STS_KEY_CONFIG_PROD }}
+      STS_KEY_ID: ${{ secrets.STS_KEY_ID_CONFIG_PROD }}
+      STS_CLIENT_ID: 'ops-portal-billing-view'
+      STS_ISSUER: 'https://sts.deliveryhero.io'
+    strategy:
+      matrix:
+        node-version: [14.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js for configurations ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@deliveryhero'
+          cache: 'yarn'
+          cache-dependency-path: configurations
+
+      - name: Install dependencies
+        run: ../../scripts/github/install_dependencies.sh
+
+      - name: Run tests
+        run: ../../scripts/github/ci/yarn_test.sh
+
+      - name: Create .env File
+        run: |
+          cp .env.production .env
+          cat .env
+
+      - name: Build
+        run: ../../scripts/github/ci/build.sh
+
+      - name: Deploy Billing View To Deliveryhero Production Environment
+        run: yarn deploy --destination=prod.Delivery_Hero --use-sts
+
+      - name: Deploy Billing View to Foodpanda Production Environment
+        run: yarn deploy --destination=prod.Foodpanda --use-sts
+
+      - name: Deploy Billing View to Foodora Production Environment
+        run: yarn deploy --destination=prod.Foodora --use-sts
+
+      - name: Deploy Billing View to Yemeksepeti Production Environment
+        run: yarn deploy --destination=prod.Yemeksepeti --use-sts
+
+      - name: Deploy Billing View to Mjam Production Environment
+        run: yarn deploy --destination=prod.Mjam --use-sts
+
+      - name: Deploy Billing View to Damejidlo Production Environment
+        run: yarn deploy --destination=prod.Damejidlo --use-sts
