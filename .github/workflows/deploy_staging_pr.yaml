@@ -1,0 +1,67 @@
+name: deploy to staging - pull_request
+
+on:
+  pull_request:
+    types: [ labeled ]
+
+jobs:
+  deploy:
+    if: ${{ github.event.label.name == 'deploy to staging'}}
+    runs-on: ubuntu-20.04
+    env:
+      STS_KEY: ${{ secrets.STS_KEY_STG }}
+      STS_KEY_ID: ${{ secrets.STS_KEY_ID_STG }}
+      STS_CLIENT_ID: 'ops-portal-billing-view'
+      STS_ISSUER: 'https://sts-st.deliveryhero.io'
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@deliveryhero'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install:dependencies
+
+      - name: Create .env File
+        run: |
+          cp .env.staging .env
+          cat .env
+
+      - name: Build
+        run: yarn build
+      
+      - name: Deploy Billing View To Deliveryhero Staging Environment
+        run: yarn deploy --destination=stag.Delivery_Hero --use-sts
+
+      - name: Deploy Billing View to Foodpanda Staging Environment
+        run: yarn deploy --destination=stag.Foodpanda --use-sts
+
+      - name: Deploy Billing View to Foodora Staging Environment
+        run: yarn deploy --destination=stag.Foodora --use-sts
+
+      - name: Deploy Billing View to Yemeksepeti Staging Environment
+        run: yarn deploy --destination=stag.Yemeksepeti --use-sts
+
+      - name: Deploy Billing View to Mjam Staging Environment
+        run: yarn deploy --destination=stag.Mjam --use-sts
+
+      - name: Deploy Billing View to Damejidlo Staging Environment
+        run: yarn deploy --destination=stag.Damejidlo --use-sts
+
+      - name: Remove Label After Deployment
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          labels: deploy to staging

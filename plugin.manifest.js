@@ -31,11 +31,5 @@ module.exports = {
         useProfiler: false,
         title: "Ops Portal",
         region: "europe",
-
-        // following configs are only relevant for external ops portal - just remove these configs for internal ops portal
-        marketName: "",
-        skipDashboardPage: false,
-        hideCountrySelector: false,
-        useCountryInPath: true,
     }
 };

@@ -8,10 +8,11 @@
     "fetchframe": "ops-portal-fetch-frame",
     "verify-deps": "ops-plugin-verify-deps",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "install:dependencies": "./scripts/github/install_dependencies.sh"
   },
   "dependencies": {
-    "@deliveryhero/armor": "^1.113.0",
+    "@deliveryhero/armor": "^1.116.0",
     "@deliveryhero/armor-icons": "^1.27.5",
     "@deliveryhero/armor-illustrations": "^1.6.6",
     "@deliveryhero/armor-system": "^1.17.1",
