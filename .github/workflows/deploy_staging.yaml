@@ -32,7 +32,7 @@ jobs:
           cache: 'yarn'
 
       - name: Install dependencies
-        run: ./../scripts/github/install_dependencies.sh
+        run: yarn install:dependencies
 
       - name: Create .env File
         run: |
@@ -40,7 +40,7 @@ jobs:
           cat .env
 
       - name: Build
-        run: ./../scripts/github/ci/build.sh
+        run: yarn build
       
       - name: Deploy Billing View To Deliveryhero Staging Environment
         run: yarn deploy --destination=stag.Delivery_Hero --use-sts

@@ -29,7 +29,7 @@ jobs:
           cache-dependency-path: configurations
 
       - name: Install dependencies
-        run: ../../scripts/github/install_dependencies.sh
+        run: yarn install:dependencies
 
       - name: Run tests
         run: ../../scripts/github/ci/yarn_test.sh
@@ -40,7 +40,7 @@ jobs:
           cat .env
 
       - name: Build
-        run: ../../scripts/github/ci/build.sh
+        run: yarn build
 
       - name: Deploy Billing View To Deliveryhero Production Environment
         run: yarn deploy --destination=prod.Delivery_Hero --use-sts
