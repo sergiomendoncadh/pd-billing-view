@@ -1,0 +1,48 @@
+.billingView {
+  position: relative;
+  padding: 10px;
+  margin: 20px;
+}
+
+.cardsSection {
+  margin: 20px 0;
+}
+
+.containerWrapper {
+  display: flex;
+  /* justify-content: center; */
+  /* width: 100%; */
+}
+
+.cardsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  /* gap: 10px; */
+  margin: 0 20px;
+} 
+
+.divider {
+  border-left: 2px solid #e6e6e6;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  height: 100px;
+}
+
+.information {
+  line-height: 1rem;
+  color: #b8b8b8;
+  font-weight: 600;
+}
+
+.infoIcon {
+  color: #b8b8b8;
+}
+
+.dateRangePicker {
+  margin-left: auto;
+  margin-top: 30px;
+}

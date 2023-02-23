@@ -1,0 +1,25 @@
+.card {
+  background-color: #e6e6e6;
+  padding: 10px;
+  min-width: 200px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.title {
+  color: #6e6e6e;
+  text-align: center;
+  margin: 0;
+}
+
+.value {
+  color: #2e2e2e;
+  text-align: center;
+  margin: 0;
+  font-size: 3rem;
+  opacity: 80%;
+}
