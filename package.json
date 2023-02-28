@@ -10,7 +10,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "install:dependencies": "./scripts/github/install_dependencies.sh",
-    "codegen": "graphql-codegen --skip-schema --config codegen.yml"
+    "codegen": "graphql-codegen --skip-schema --config codegen.yml",
+    "codegen:watch": "graphql-codegen --config codegen.yml --watch --skip-schema"
   },
   "dependencies": {
     "@apollo/client": "^3.7.9",

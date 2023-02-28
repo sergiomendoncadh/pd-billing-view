@@ -26,30 +26,32 @@ export function initApollo(baseApi: IOpsSdk, history: History) {
       operation,
       forward,
     }: ErrorResponse): any => {
-      if (graphQLErrors)
+      if (graphQLErrors) {
         for (const err of graphQLErrors) {
-          switch (err.extensions.code) {
-            case ErrorTypes.FORBIDDEN:
-              history.push(`/error/${FORBIDDEN_ERROR}`);
-              break;
-            case ErrorTypes.UNAUTHENTICATED:
-              return new Observable((observer) => {
-                baseApi
-                  .refreshAccessToken()
-                  .then(() => {
-                    const subscriber = {
-                      next: observer.next.bind(observer),
-                      error: observer.error.bind(observer),
-                      complete: observer.complete.bind(observer),
-                    };
-                    forward(operation).subscribe(subscriber);
-                  })
-                  .catch((error) => {
-                    observer.error(error);
-                  });
-              });
+            switch (err.extensions.code) {
+              case ErrorTypes.FORBIDDEN:
+                history.push(`/error/${FORBIDDEN_ERROR}`);
+                break;
+              case ErrorTypes.UNAUTHENTICATED:
+                return new Observable((observer) => {
+                  baseApi
+                    .refreshAccessToken()
+                    .then(() => {
+                      const subscriber = {
+                        next: observer.next.bind(observer),
+                        error: observer.error.bind(observer),
+                        complete: observer.complete.bind(observer),
+                      };
+                      forward(operation).subscribe(subscriber);
+                    })
+                    .catch((error) => {
+                      observer.error(error);
+                    });
+                });
+            }
           }
-        }
+      }
+
       if (networkError) {
         console.log(`[Network error]: ${networkError}`);
       }
