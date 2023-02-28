@@ -1,12 +1,26 @@
-import {IOpsSdk} from "@deliveryhero/opsportal";
+import { IOpsSdk } from "@deliveryhero/opsportal";
 import React from "react";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { Container, Divider, Grid, GridItem, Typography, Link } from '@deliveryhero/armor';
 import WelcomeIllustration from "@src/WelcomeIllustration";
 import { FileCommonTextIcon } from '@deliveryhero/armor-icons'
+import { useGetSummarizedDataQuery } from "./modules/graphql/getSummarizedData.generated";
 
-const Intro: React.FC<{ baseApi: IOpsSdk }> = ({baseApi}) => {
+const Intro: React.FC<{ baseApi: IOpsSdk }> = ({ baseApi }) => {
     const name = baseApi.getUserName();
+
+    // TODO: remove this sample usage call
+    const { data, loading, error } = useGetSummarizedDataQuery({
+        variables: {
+            filter: {
+                startDate: "",
+                endDate: "",
+            }
+        },
+        onCompleted: (data) => {
+            console.log(data);
+        }
+    });
 
     const { t } = useTranslation();
 
