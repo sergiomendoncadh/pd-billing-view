@@ -10,11 +10,12 @@ const Intro: React.FC<{ baseApi: IOpsSdk }> = ({ baseApi }) => {
     const name = baseApi.getUserName();
 
     // TODO: remove this sample usage call
+    // https://jira.deliveryhero.com/browse/PBP-490
     const { data, loading, error } = useGetSummarizedDataQuery({
         variables: {
             filter: {
-                startDate: "",
-                endDate: "",
+                startDate: "2022-02-26 00:00:00",
+                endDate: "2022-02-26 00:00:00",
             }
         },
         onCompleted: (data) => {
