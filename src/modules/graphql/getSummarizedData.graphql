@@ -1,0 +1,7 @@
+query getSummarizedData($filter: SummarizedDataInput!) {
+  summarizedData(filter: $filter) {
+    ordersSentCount
+    ordersFailedPercentage
+    ordersTotalCount
+  }
+}
