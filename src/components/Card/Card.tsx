@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Card.module.css';
-import { Typography } from '@deliveryhero/armor';
-
+import { Box } from '@deliveryhero/armor';
+import { Text } from '../Text/Text';
 
 interface ICard {
   title: string;
@@ -10,9 +10,17 @@ interface ICard {
 
 export const Card: React.FC<ICard> = ({ title, value }) => {
   return (
-    <div className={styles.card}>
-      <Typography className={styles.title} paragraph>{title}</Typography>
-      <Typography className={styles.value} pageTitle>{value}</Typography>
-    </div>
-  )
-}
+    <Box className={styles.card}>
+      <Text
+        fontSize='small'
+        content={title}
+        className={styles.title}
+      />
+      <Text
+        fontSize='large'
+        content={value}
+        className={styles.value}
+      />
+    </Box>
+  );
+};

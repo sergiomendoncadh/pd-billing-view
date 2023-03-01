@@ -1,41 +1,18 @@
 .filterLayout {
-  background-color: #F9F9F9;
+  background-color: #f9f9f9;
   border: 1px solid rgb(219, 219, 219);
-  height: 300px;
+  height: 250px;
   padding: 20px 40px;
-
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .filtersContainer {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  /* justify-content: space-between; */
   align-items: center;
   gap: 40px;
   position: relative;
-}
-
-.orderCodeSearchInput {
-  position: relative;
-  width: 500px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-}
-
-.input {
-  height: 50px;
-  padding-left: 20px;
-  width: 500px;
-  border-radius: 4px;
-  border: 1px solid rgb(219, 219, 219)
-}
-
-.searchIcon {
-  position: absolute;
-  right: 5px;
 }
 
 .checkboxFilters {
@@ -45,27 +22,14 @@
   flex-wrap: nowrap;
   justify-content: space-between;
   align-items: center;
-  margin-right: 100px;
 }
 
-.checkbox {
-  position: relative;
-  height: 50px;
-  width: 150px;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.info {
-  position: absolute;
-  top: 0px;
-  right: 0px;
+.statusDropdown {
+  flex-basis: 100%;
 }
 
 .buttons {
   display: flex;
-  /* justify-content: space-between; */
   gap: 10px;
   position: absolute;
   bottom: 30px;
@@ -74,11 +38,21 @@
 
 .searchButton {
   background-color: #545454;
-  box-shadow: 5px 5px 5px #dadada;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.searchButton:hover {
+  background-color: #2a2a2a !important;
 }
 
 .resetButton {
-  background-color: #FCFBFB;
-  color: #AC9E9E;
-  border: 1px solid #DBDBDB;
+  background-color: #fcfbfb;
+  color: #ac9e9e;
+  border: none;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.resetButton:hover {
+  background-color: #ff0000 !important;
+  border: none;
 }

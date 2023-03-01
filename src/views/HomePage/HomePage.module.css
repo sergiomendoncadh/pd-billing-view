@@ -2,25 +2,19 @@
   position: relative;
   padding: 10px;
   margin: 20px;
-}
-
-.cardsSection {
-  margin: 20px 0;
-}
-
-.containerWrapper {
-  display: flex;
-  /* justify-content: center; */
-  /* width: 100%; */
+  margin: 0 auto;
+  /* width: 1400px; */
+  position: relative;
+  overflow: hidden;
 }
 
 .cardsContainer {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  /* gap: 10px; */
   margin: 0 20px;
-} 
+  gap: 10px;
+}
 
 .divider {
   border-left: 2px solid #e6e6e6;
@@ -42,7 +36,10 @@
   color: #b8b8b8;
 }
 
-.dateRangePicker {
-  margin-left: auto;
+.orderListPlaceholder {
+  display: flex;
+  justify-content: center;
   margin-top: 30px;
+  flex-direction: column;
+  align-items: center;
 }

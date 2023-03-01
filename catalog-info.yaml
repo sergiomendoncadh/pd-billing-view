@@ -1,12 +1,12 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: "ops-portal-billing-view"
-  description: "Billing View is a reconciliation dashboard that provides users with the transparency on how many orders were sent to SAP, billable, receiptable, etc"
+  name: 'ops-portal-billing-view'
+  description: 'Billing View is a reconciliation dashboard that provides users with the transparency on how many orders were sent to SAP, billable, receiptable, etc'
   annotations:
     github.com/project-slug: deliveryhero/pd-billing-view
 spec:
   type: plugin
   lifecycle: experimental
-  owner: "pandora-billing-portal"
-  dependsOn: ["component:dhh-iam"]
+  owner: 'pandora-billing-portal'
+  dependsOn: ['component:dhh-iam']

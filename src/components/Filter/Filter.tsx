@@ -1,79 +1,39 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { FilterLayout } from '@deliveryhero/armor-filter';
+import styles from './Filter.module.css';
 import {
-  FilterLayout,
-} from '@deliveryhero/armor-filter';
-import styles from './Filter.module.css'
-import { Button, Typography, Checkbox, Stack, Dropdown } from '@deliveryhero/armor';
-import { SearchIcon, InfoOutlineIcon } from '@deliveryhero/armor-icons';
+  Button,
+  Stack,
+  Dropdown,
+  Box
+} from '@deliveryhero/armor';
+import { Text } from '../Text/Text';
+import { SearchInput } from '../SearchInput/SearchInput';
+import { FilterCheckbox } from '../FilterCheckbox/FilterCheckbox';
 
 export const Filter = () => {
-  const [value, setValue] = useState('')
   return (
-    <>
-      <FilterLayout tall marginTop={10} className={styles.filterLayout}>
-        <Typography subSectionTitle>Search Filters</Typography>
-        <div className={styles.filtersContainer}>
-          <div className={styles.orderCodeSearchInput}>
-            <input
-              placeholder="Order Code or Vendor Code"
-              className={styles.input}
-              onChange={(event) => setValue(event.target.value)}
-              value={value}
-              type={"text"}
-            />
-            <div className={styles.searchIcon}>
-              <SearchIcon medium />
-            </div>
-          </div>
-          <Stack className={styles.checkboxFilters}>
-            <div className={styles.checkbox}>
-              <Checkbox
-                onChange={() => { }}
-                label="Billable"
-                marginBottom={2}
-                enterKeyHint
-              />
-              <div className={styles.info}>
-                <InfoOutlineIcon medium />
-              </div>
-            </div>
-            <div className={styles.checkbox}>
-              <Checkbox
-                onChange={() => { }}
-                label="Receiptable"
-                marginBottom={2}
-                enterKeyHint
-              />
-              <div className={styles.info}>
-                <InfoOutlineIcon medium />
-              </div>
-            </div>
-            <div className={styles.checkbox}>
-              <Checkbox
-                onChange={() => { }}
-                label="Wastage"
-                marginBottom={2}
-                enterKeyHint
-              />
-              <div className={styles.info}>
-                <InfoOutlineIcon medium />
-              </div>
-            </div>
-          </Stack>
-          <div className={styles.dropdown}>
-            <Dropdown
-              options={['Delivered', 'Paid', 'Cancelled']}
-              label="Status"
-            />
-          </div>
-        </div>
-        <div className={styles.buttons}>
-          <Button className={styles.searchButton}>Search</Button>
-          <Button className={styles.resetButton}>Reset</Button>
-        </div>
-      </ FilterLayout>
-    </>
-  )
-
-}
-
+    <FilterLayout tall marginTop={10} className={styles.filterLayout}>
+      <Text
+        fontSize='small'
+        content='Search Filters'
+        margin={'0 0 20px 0'}
+      />
+      <Box className={styles.filtersContainer}>
+        <SearchInput />
+        <Stack className={styles.checkboxFilters}>
+          <FilterCheckbox checkboxLabel='Billable' tooltipInfo='Order is billable' />
+          <FilterCheckbox checkboxLabel='Receiptable' tooltipInfo='Customer receipt is generated for the order' />
+          <FilterCheckbox checkboxLabel='Wastage' tooltipInfo='Order is accepted by the vendor but is cancelled pre-delivery' />
+        </Stack>
+        <Box className={styles.statusDropdown}>
+          <Dropdown options={['Delivered', 'Paid', 'Cancelled']} label='Status' />
+        </Box>
+      </Box>
+      <Box className={styles.buttons}>
+        <Button className={styles.searchButton}>Search</Button>
+        <Button className={styles.resetButton}>Reset</Button>
+      </Box>
+    </FilterLayout>
+  );
+};

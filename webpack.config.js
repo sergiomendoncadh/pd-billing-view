@@ -1,4 +1,3 @@
-//Overrides for the default webpack config
+// Overrides for the default webpack config
 
-module.exports = {
-};
+module.exports = {};
