@@ -15,15 +15,6 @@
   position: relative;
 }
 
-.checkboxFilters {
-  width: 500px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .statusDropdown {
   flex-basis: 100%;
 }
