@@ -1,6 +1,6 @@
-# OPS Portal Plugin ops-portal-billing-view
+# Billing View
 
-Plugin for [OPS Portal](https://github.com/deliveryhero/dh-platform-ops-portal/blob/master/docs/ops-portal.md).
+Plugin for [Ops Portal](https://github.com/deliveryhero/dh-platform-ops-portal/blob/master/docs/ops-portal.md).
 
 This sources are giving an easy start for **React** applications to be hooked within OpsPortal.
 

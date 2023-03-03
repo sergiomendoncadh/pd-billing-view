@@ -1,0 +1,26 @@
+overwrite: true
+schema:
+  - http://localhost:8080/billing-ops-portal-graphql-bff/graphql:
+      headers:
+        Authorization: "Bearer <access token>"
+documents: "./src/**/*.graphql"
+generates:
+  src/modules/types.graphql.ts:
+    plugins:
+      - "typescript"
+  src/modules:
+    preset: near-operation-file
+    presetConfig:
+      extension: .generated.tsx
+      baseTypesPath: types.graphql.ts
+    config:
+      withHooks: true
+    plugins:
+      - "typescript-operations"
+      - "typescript-react-apollo"
+  ./graphql.schema.json:
+    plugins:
+      - "introspection"
+  ./schema.graphql:
+    plugins:
+      - schema-ast

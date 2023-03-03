@@ -1,0 +1,16 @@
+{
+  "name": "Configurations GraphQL Schema",
+  "schemaPath": "schema.graphql",
+  "extensions": {
+    "endpoints": {
+      "Default GraphQL Endpoint": {
+        "url": "http://localhost:8080/billing-ops-portal-graphql-bff/graphql",
+        "headers": {
+          "user-agent": "JS GraphQL",
+          "Authorization": "Bearer <token>"
+        },
+        "introspect": false
+      }
+    }
+  }
+}
