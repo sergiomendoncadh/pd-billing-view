@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Card.module.css';
 import { Box } from '@deliveryhero/armor';
-import { Text } from '../Text/Text';
+import { Text } from '../Text';
 
 interface ICard {
   title: string;

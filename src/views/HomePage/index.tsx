@@ -1,12 +1,12 @@
 import React from 'react';
 import { Container, Flex, FlexItem } from '@deliveryhero/armor';
-import { Card } from '../../components/Card/Card';
-import { Filter } from '../../components/Filter/Filter';
-import styles from './HomePage.module.css';
 import { InfoOutlineIcon } from '@deliveryhero/armor-icons';
 import { SearchingIllustration } from '@deliveryhero/armor-illustrations';
-import { Text } from '../../components/Text/Text';
-import { DatePicker } from '../../components/DatePicker/DatePicker';
+import styles from './HomePage.module.css';
+import { Text } from '@components/Text';
+import { Filter } from '@components/Filter';
+import { DatePicker } from '@components/DatePicker';
+import { Card } from '@components/Card';
 
 export const HomePage: React.FC = () => {
   const cards = [

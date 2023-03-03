@@ -17,9 +17,10 @@
     "jsx": "react",
     "baseUrl": "./src",
     "paths": {
-      "@src/*": ["*"]
+      "@components/*": ["components/*"],
+      "@views/*": ["views/*"],
+      "@modules/*": ["modules/*"]
     }
-    // "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
   "include": ["src", "src/globals.d.ts"]
 }

@@ -1,15 +1,15 @@
 import React from 'react';
 import { FilterLayout } from '@deliveryhero/armor-filter';
-import styles from './Filter.module.css';
 import {
   Button,
   Stack,
   Dropdown,
   Box
 } from '@deliveryhero/armor';
-import { Text } from '../Text/Text';
-import { SearchInput } from '../SearchInput/SearchInput';
-import { FilterCheckbox } from '../FilterCheckbox/FilterCheckbox';
+import styles from './Filter.module.css';
+import { Text } from '../Text';
+import { SearchInput } from '../SearchInput';
+import { FilterCheckbox } from '../FilterCheckbox';
 
 export const Filter = () => {
   return (

@@ -1,13 +1,13 @@
 import { IOpsSdk, createPluginHistory } from '@deliveryhero/opsportal';
+import { Box } from '@deliveryhero/armor';
 import React, { useEffect } from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
-import { HomePage } from '@src/views/HomePage';
 import { I18nextProvider } from 'react-i18next';
-import styled from 'styled-components';
-import { Box } from '@deliveryhero/armor';
 import { ApolloClient, ApolloProvider } from '@apollo/client';
-import { useApolloClient } from './modules/common/hooks/useApolloClient';
-import { BaseApiProvider } from './modules/common/context';
+import { useApolloClient } from '@modules/common/hooks/useApolloClient';
+import { BaseApiProvider } from '@modules/common/context';
+import styled from 'styled-components';
+import { HomePage } from '@views/HomePage';
 
 const Wrapper = styled(Box)`
   background-color: #fff;
