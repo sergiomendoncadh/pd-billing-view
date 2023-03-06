@@ -11,16 +11,8 @@ interface ICard {
 export const Card: React.FC<ICard> = ({ title, value }) => {
   return (
     <Box className={styles.card}>
-      <Text
-        fontSize='small'
-        content={title}
-        className={styles.title}
-      />
-      <Text
-        fontSize='large'
-        content={value}
-        className={styles.value}
-      />
+      <Text fontSize='small' content={title} className={styles.title} />
+      <Text fontSize='large' content={value} className={styles.value} />
     </Box>
   );
 };

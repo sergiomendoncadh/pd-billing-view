@@ -2,7 +2,7 @@ name: deploy to staging - pull_request
 
 on:
   pull_request:
-    types: [ labeled ]
+    types: [labeled]
 
 jobs:
   deploy:
@@ -41,7 +41,7 @@ jobs:
 
       - name: Build
         run: yarn build
-      
+
       - name: Deploy Billing View To Deliveryhero Staging Environment
         run: yarn deploy --destination=stag.Delivery_Hero --use-sts
 

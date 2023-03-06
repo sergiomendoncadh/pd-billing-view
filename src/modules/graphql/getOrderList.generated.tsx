@@ -7,27 +7,41 @@ export type GetOrderListQueryVariables = Types.Exact<{
   filter: Types.FilterQueryInput;
 }>;
 
-
-export type GetOrderListQuery = { __typename?: 'Query', billingViewOrderList: Array<{ __typename?: 'OrderItem', OrderCode: string, VendorCode: string, StatusCode?: number | null, IsWastage?: boolean | null, IsBillable?: boolean | null, IsReceiptable?: boolean | null, OrderSource?: string | null, Vertical?: string | null, OrderPlacedAt?: string | null, OrderUpdatedAt?: string | null, LatestEventType?: string | null } | null> };
-
+export type GetOrderListQuery = {
+  __typename?: 'Query';
+  billingViewOrderList: Array<{
+    __typename?: 'OrderItem';
+    OrderCode: string;
+    VendorCode: string;
+    StatusCode?: number | null;
+    IsWastage?: boolean | null;
+    IsBillable?: boolean | null;
+    IsReceiptable?: boolean | null;
+    OrderSource?: string | null;
+    Vertical?: string | null;
+    OrderPlacedAt?: string | null;
+    OrderUpdatedAt?: string | null;
+    LatestEventType?: string | null;
+  } | null>;
+};
 
 export const GetOrderListDocument = gql`
-    query GetOrderList($filter: FilterQueryInput!) {
-  billingViewOrderList(filter: $filter) {
-    OrderCode
-    VendorCode
-    StatusCode
-    IsWastage
-    IsBillable
-    IsReceiptable
-    OrderSource
-    Vertical
-    OrderPlacedAt
-    OrderUpdatedAt
-    LatestEventType
+  query GetOrderList($filter: FilterQueryInput!) {
+    billingViewOrderList(filter: $filter) {
+      OrderCode
+      VendorCode
+      StatusCode
+      IsWastage
+      IsBillable
+      IsReceiptable
+      OrderSource
+      Vertical
+      OrderPlacedAt
+      OrderUpdatedAt
+      LatestEventType
+    }
   }
-}
-    `;
+`;
 
 /**
  * __useGetOrderListQuery__
@@ -45,14 +59,27 @@ export const GetOrderListDocument = gql`
  *   },
  * });
  */
-export function useGetOrderListQuery(baseOptions: Apollo.QueryHookOptions<GetOrderListQuery, GetOrderListQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetOrderListQuery, GetOrderListQueryVariables>(GetOrderListDocument, options);
-      }
-export function useGetOrderListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOrderListQuery, GetOrderListQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetOrderListQuery, GetOrderListQueryVariables>(GetOrderListDocument, options);
-        }
+export function useGetOrderListQuery(
+  baseOptions: Apollo.QueryHookOptions<GetOrderListQuery, GetOrderListQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetOrderListQuery, GetOrderListQueryVariables>(
+    GetOrderListDocument,
+    options
+  );
+}
+export function useGetOrderListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetOrderListQuery, GetOrderListQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetOrderListQuery, GetOrderListQueryVariables>(
+    GetOrderListDocument,
+    options
+  );
+}
 export type GetOrderListQueryHookResult = ReturnType<typeof useGetOrderListQuery>;
 export type GetOrderListLazyQueryHookResult = ReturnType<typeof useGetOrderListLazyQuery>;
-export type GetOrderListQueryResult = Apollo.QueryResult<GetOrderListQuery, GetOrderListQueryVariables>;
+export type GetOrderListQueryResult = Apollo.QueryResult<
+  GetOrderListQuery,
+  GetOrderListQueryVariables
+>;

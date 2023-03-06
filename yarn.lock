@@ -1880,7 +1880,7 @@
     xml2js "0.4.23"
     yamux-js "0.1.0"
 
-"@deliveryhero/armor-datepicker@1.9.2", "@deliveryhero/armor-datepicker@^1.9.0":
+"@deliveryhero/armor-datepicker@^1.9.0":
   version "1.9.2"
   resolved "https://npm.pkg.github.com/download/@deliveryhero/armor-datepicker/1.9.2/b663bc4232f1069e85c6f9defbc9c24d0face686#b663bc4232f1069e85c6f9defbc9c24d0face686"
   integrity sha512-pRqkQcckcdc5tIDk+uq3GXcOWyyCi9u9mjt+kX6Xp7BzSJVyq4Xr9teC27tdDhiD8fPcPlE2qhKM5ySP2+TOWA==
@@ -1890,18 +1890,6 @@
     "@deliveryhero/armor-system" "1.17.2"
     prop-types "^15.7.2"
     rifm "^0.12.1"
-
-"@deliveryhero/armor-filter@^1.2.0":
-  version "1.2.2"
-  resolved "https://npm.pkg.github.com/download/@deliveryhero/armor-filter/1.2.2/cc24216d031621ad9e8b5ff18f4b7bf613f03b88#cc24216d031621ad9e8b5ff18f4b7bf613f03b88"
-  integrity sha512-GQ4imNVY2aIYcL5Ji6eusdRKFel7Xba7b31n4GtMIGGMsbTVx2fuWHpG2vsIh2q7jfuMUu9LrWDh19dH6pYMsQ==
-  dependencies:
-    "@deliveryhero/armor" "1.116.2"
-    "@deliveryhero/armor-datepicker" "1.9.2"
-    "@deliveryhero/armor-system" "1.17.2"
-    clone-deep "^4.0.1"
-    prop-types "^15.7.2"
-    query-string "^7.0.0"
 
 "@deliveryhero/armor-icons@1.27.5", "@deliveryhero/armor-icons@^1.27.5":
   version "1.27.5"

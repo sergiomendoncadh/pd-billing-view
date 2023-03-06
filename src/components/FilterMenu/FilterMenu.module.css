@@ -4,32 +4,30 @@
   height: 250px;
   padding: 20px 40px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
 }
 
 .filtersContainer {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
   align-items: center;
   gap: 40px;
-  position: relative;
-}
-
-.statusDropdown {
-  flex-basis: 100%;
 }
 
 .buttons {
   display: flex;
   gap: 10px;
-  position: absolute;
-  bottom: 30px;
-  right: 30px;
+  flex-grow: 2;
+  justify-content: flex-end;
+  align-self: flex-end;
 }
 
 .searchButton {
   background-color: #545454;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  align-self: flex-end;
 }
 
 .searchButton:hover {
@@ -41,6 +39,7 @@
   color: #ac9e9e;
   border: none;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  align-self: flex-end;
 }
 
 .resetButton:hover {

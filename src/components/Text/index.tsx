@@ -8,7 +8,12 @@ interface ITextProps {
   className?: string;
 }
 
-export const Text: React.FC<ITextProps> = ({ fontSize = 'medium', content, margin = '0', className }) => {
+export const Text: React.FC<ITextProps> = ({
+  fontSize = 'medium',
+  content,
+  margin = '0',
+  className
+}) => {
   const font = { pageTitle: false, sectionTitle: false, subSectionTitle: false };
   switch (fontSize) {
     case 'large':

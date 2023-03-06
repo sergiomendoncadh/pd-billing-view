@@ -25,18 +25,16 @@ interface GlobalProvidersProps {
 export const GlobalProviders: React.FC<GlobalProvidersProps> = ({
   children,
   apolloClient,
-  baseApi,
+  baseApi
 }: GlobalProvidersProps) => {
   return (
     <ApolloProvider client={apolloClient}>
-      <BaseApiProvider baseApi={baseApi}>
-        {children}
-      </BaseApiProvider>
+      <BaseApiProvider baseApi={baseApi}>{children}</BaseApiProvider>
     </ApolloProvider>
   );
 };
 
-export const App: React.FC<{ baseApi: IOpsSdk; }> = ({ baseApi }) => {
+export const App: React.FC<{ baseApi: IOpsSdk }> = ({ baseApi }) => {
   const client = useApolloClient(baseApi);
 
   useEffect(() => {
@@ -50,7 +48,7 @@ export const App: React.FC<{ baseApi: IOpsSdk; }> = ({ baseApi }) => {
         <I18nextProvider i18n={baseApi.getI18nInstance()}>
           <Router history={createPluginHistory(baseApi)}>
             <Switch>
-              <Route path="/" render={() => <HomePage baseApi={baseApi} />} exact />
+              <Route path='/' render={() => <HomePage baseApi={baseApi} />} exact />
             </Switch>
           </Router>
         </I18nextProvider>

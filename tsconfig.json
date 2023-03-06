@@ -19,7 +19,8 @@
     "paths": {
       "@components/*": ["components/*"],
       "@views/*": ["views/*"],
-      "@modules/*": ["modules/*"]
+      "@modules/*": ["modules/*"],
+      "@utils/*": ["utils/*"]
     }
   },
   "include": ["src", "src/globals.d.ts"]

@@ -2,12 +2,12 @@ overwrite: true
 schema:
   - http://localhost:8080/billing-ops-portal-graphql-bff/graphql:
       headers:
-        Authorization: "Bearer <access token>"
-documents: "./src/**/*.graphql"
+        Authorization: 'Bearer <access token>'
+documents: './src/**/*.graphql'
 generates:
   src/modules/types.graphql.ts:
     plugins:
-      - "typescript"
+      - 'typescript'
   src/modules:
     preset: near-operation-file
     presetConfig:
@@ -16,11 +16,11 @@ generates:
     config:
       withHooks: true
     plugins:
-      - "typescript-operations"
-      - "typescript-react-apollo"
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
   ./graphql.schema.json:
     plugins:
-      - "introspection"
+      - 'introspection'
   ./schema.graphql:
     plugins:
       - schema-ast

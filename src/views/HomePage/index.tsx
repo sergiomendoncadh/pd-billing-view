@@ -4,30 +4,40 @@ import { InfoOutlineIcon } from '@deliveryhero/armor-icons';
 import { SearchingIllustration } from '@deliveryhero/armor-illustrations';
 import styles from './HomePage.module.css';
 import { Text } from '@components/Text';
-import { Filter } from '@components/Filter';
+import { FilterMenu } from '@components/FilterMenu';
 import { DatePicker } from '@components/DatePicker';
 import { Card } from '@components/Card';
+import { IOpsSdk } from '@deliveryhero/opsportal';
+import { useGetSummarizedDataQuery } from "@modules/graphql/getSummarizedData.generated";
 
-export const HomePage: React.FC = () => {
-  const cards = [
-    { id: 1, title: 'Orders in Billing', value: 124.3 },
-    { id: 2, title: 'Order failed to be sent to SAP', value: 3.7 },
-    { id: 3, title: 'Orders sent to SAP', value: 25.3 }
-  ];
+interface IHomeView {
+  baseApi: IOpsSdk;
+}
+
+export const HomePage: React.FC<IHomeView> = () => {
+  const [dateRange, setDateRange] = React.useState<[string, string]>();
+
+  const { data } = useGetSummarizedDataQuery({
+    variables: {
+      filter: { endDate: dateRange && dateRange[1], startDate: dateRange && dateRange[0] }
+    }
+  });
+
+  const summarizedDataResponse = data?.summarizedData;
 
   return (
     <>
       <Container className={styles.billingView}>
         <Flex alignItems='center'>
           <Text fontSize='large' content='Billing View' />
-          <DatePicker />
+          <DatePicker onDateRangeSelected={(dateRange: [string, string]) => setDateRange(dateRange)} />
         </Flex>
         <Text fontSize={'medium'} content='Summarized Data' margin={'20px'} />
         <Flex justifyContent='space-between'>
           <FlexItem maxWidth='lg' className={styles.cardsContainer}>
-            {cards.map((card) => {
-              return <Card title={card.title} value={card.value} key={card.id} />;
-            })}
+            <Card title={'Orders in Billing'} value={summarizedDataResponse?.ordersTotalCount as number} />
+            <Card title={'Order failed to be sent to SAP'} value={summarizedDataResponse?.ordersFailedPercentage as number} />
+            <Card title={'Orders sent to SAP'} value={summarizedDataResponse?.ordersSentCount as number} />
           </FlexItem>
           <FlexItem className={styles.divider}>
             <InfoOutlineIcon large className={styles.infoIcon} />
@@ -38,7 +48,7 @@ export const HomePage: React.FC = () => {
             />
           </FlexItem>
         </Flex>
-        <Filter />
+        <FilterMenu />
       </Container>
       <Flex direction='column' alignItems='center'>
         <SearchingIllustration width='100px' />
