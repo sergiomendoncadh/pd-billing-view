@@ -7,25 +7,19 @@ export type GetSummarizedDataQueryVariables = Types.Exact<{
   filter: Types.SummarizedDataInput;
 }>;
 
-export type GetSummarizedDataQuery = {
-  __typename?: 'Query';
-  summarizedData: {
-    __typename?: 'SummarizedData';
-    ordersSentCount?: number | null;
-    ordersFailedPercentage?: number | null;
-    ordersTotalCount?: number | null;
-  };
-};
+
+export type GetSummarizedDataQuery = { __typename?: 'Query', summarizedData: { __typename?: 'SummarizedData', ordersSentCount?: number | null, ordersFailedPercentage?: number | null, ordersTotalCount?: number | null } };
+
 
 export const GetSummarizedDataDocument = gql`
-  query getSummarizedData($filter: SummarizedDataInput!) {
-    summarizedData(filter: $filter) {
-      ordersSentCount
-      ordersFailedPercentage
-      ordersTotalCount
-    }
+    query getSummarizedData($filter: SummarizedDataInput!) {
+  summarizedData(filter: $filter) {
+    ordersSentCount
+    ordersFailedPercentage
+    ordersTotalCount
   }
-`;
+}
+    `;
 
 /**
  * __useGetSummarizedDataQuery__
@@ -43,27 +37,14 @@ export const GetSummarizedDataDocument = gql`
  *   },
  * });
  */
-export function useGetSummarizedDataQuery(
-  baseOptions: Apollo.QueryHookOptions<GetSummarizedDataQuery, GetSummarizedDataQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetSummarizedDataQuery, GetSummarizedDataQueryVariables>(
-    GetSummarizedDataDocument,
-    options
-  );
-}
-export function useGetSummarizedDataLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetSummarizedDataQuery, GetSummarizedDataQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetSummarizedDataQuery, GetSummarizedDataQueryVariables>(
-    GetSummarizedDataDocument,
-    options
-  );
-}
+export function useGetSummarizedDataQuery(baseOptions: Apollo.QueryHookOptions<GetSummarizedDataQuery, GetSummarizedDataQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSummarizedDataQuery, GetSummarizedDataQueryVariables>(GetSummarizedDataDocument, options);
+      }
+export function useGetSummarizedDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSummarizedDataQuery, GetSummarizedDataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSummarizedDataQuery, GetSummarizedDataQueryVariables>(GetSummarizedDataDocument, options);
+        }
 export type GetSummarizedDataQueryHookResult = ReturnType<typeof useGetSummarizedDataQuery>;
 export type GetSummarizedDataLazyQueryHookResult = ReturnType<typeof useGetSummarizedDataLazyQuery>;
-export type GetSummarizedDataQueryResult = Apollo.QueryResult<
-  GetSummarizedDataQuery,
-  GetSummarizedDataQueryVariables
->;
+export type GetSummarizedDataQueryResult = Apollo.QueryResult<GetSummarizedDataQuery, GetSummarizedDataQueryVariables>;

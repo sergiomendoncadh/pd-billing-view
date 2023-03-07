@@ -9,7 +9,14 @@ interface IDatePicker {
 }
 
 export const DatePicker: React.FC<IDatePicker> = ({ onDateRangeSelected }) => {
-  const [dateValue, setDateValue] = React.useState<[Date, Date]>();
+  const getDefaultValue = React.useMemo<[Date, Date]>(() => {
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+    return [yesterday, today];
+  }, []);
+
+  const [dateValue, setDateValue] = React.useState<[Date, Date]>(() => getDefaultValue);
 
   const formatDateTime = (value: unknown) =>
     format(value instanceof Date ? value : new Date(value as string), 'dd.MM.yyyy');
@@ -45,6 +52,7 @@ export const DatePicker: React.FC<IDatePicker> = ({ onDateRangeSelected }) => {
         formatDateTime={formatDateTime}
         allowedDateRanges={[[`current-${totalDays}`, 'current']]}
         enableCloseOnSelect
+        defaultDateValue={getDefaultValue}
       />
     </Box >
   );

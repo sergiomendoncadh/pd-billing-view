@@ -5,7 +5,7 @@ import { Text } from '../Text';
 
 interface ICard {
   title: string;
-  value: number;
+  value: number | string;
 }
 
 export const Card: React.FC<ICard> = ({ title, value }) => {

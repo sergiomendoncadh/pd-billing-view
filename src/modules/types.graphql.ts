@@ -123,41 +123,51 @@ export type Mutation = {
   updateVendorCalculationConfig: UpdateCalculationConfigResponse;
 };
 
+
 export type MutationConfirmPaymentArgs = {
   input: ConfirmPaymentInput;
 };
+
 
 export type MutationCreateAggregatorApiRequestArgs = {
   input: AggregatorApiRequest;
 };
 
+
 export type MutationCreateCalculationTemplateArgs = {
   input: CreateCalculationTemplateInput;
 };
+
 
 export type MutationCreateReprocessRequestArgs = {
   input: ReprocessRequest;
 };
 
+
 export type MutationCreateTaxValueArgs = {
   input?: InputMaybe<CreateTaxValueInput>;
 };
+
 
 export type MutationDeleteTaxValueArgs = {
   id: Scalars['ID'];
 };
 
+
 export type MutationToggleOrderBillableFlagArgs = {
   input?: InputMaybe<ToggleOrderBillableInput>;
 };
+
 
 export type MutationUpdateCountryCalculationConfigArgs = {
   input?: InputMaybe<UpdateCountryCalculationConfigInput>;
 };
 
+
 export type MutationUpdateTaxValueArgs = {
   input?: InputMaybe<UpdateTaxValueInput>;
 };
+
 
 export type MutationUpdateVendorCalculationConfigArgs = {
   input?: InputMaybe<UpdateVendorCalculationConfigInput>;
@@ -263,17 +273,21 @@ export type Query = {
   vendors: Array<Maybe<Vendor>>;
 };
 
+
 export type QueryBillingViewOrderListArgs = {
   filter: FilterQueryInput;
 };
+
 
 export type QueryCalculationConfigArgs = {
   vendorCode?: InputMaybe<Scalars['String']>;
 };
 
+
 export type QueryOrderArgs = {
   orderCode: Scalars['String'];
 };
+
 
 export type QueryReceivablesArgs = {
   filter?: InputMaybe<ReceivableFilterInput>;
@@ -281,25 +295,31 @@ export type QueryReceivablesArgs = {
   sorting?: InputMaybe<DataSort>;
 };
 
+
 export type QueryRecentRequestsArgs = {
   entity: Scalars['String'];
 };
+
 
 export type QuerySummarizedDataArgs = {
   filter: SummarizedDataInput;
 };
 
+
 export type QueryTemplateContentArgs = {
   templateId: Scalars['String'];
 };
+
 
 export type QueryTotalOpenBalanceArgs = {
   filter?: InputMaybe<TotalOpenBalanceFilterInput>;
 };
 
+
 export type QueryVendorArgs = {
   vendorCode: Scalars['String'];
 };
+
 
 export type QueryVendorsArgs = {
   filter?: InputMaybe<VendorsFilterInput>;
