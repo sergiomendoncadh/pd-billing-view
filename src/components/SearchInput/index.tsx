@@ -12,7 +12,8 @@ export const SearchInput: React.FC = () => {
       onChange={(event) => {
         setSearchCodeValue(event.target.value);
       }}
-      width={'500px'}
+      width={100}
+      marginRight={5}
     />
   );
 };

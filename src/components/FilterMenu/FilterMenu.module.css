@@ -1,19 +1,10 @@
-.filterLayout {
+.searchFiltersContainer {
   background-color: #f9f9f9;
   border: 1px solid rgb(219, 219, 219);
-  height: 250px;
+  height: 150px;
   padding: 20px 40px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  display: flex;
-  flex-direction: column;
   margin-top: 20px;
-}
-
-.filtersContainer {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 40px;
 }
 
 .buttons {
@@ -31,7 +22,7 @@
 }
 
 .searchButton:hover {
-  background-color: #2a2a2a !important;
+  background-color: #2a2a2a;
 }
 
 .resetButton {
@@ -43,6 +34,6 @@
 }
 
 .resetButton:hover {
-  background-color: #ff0000 !important;
+  background-color: #ff0000;
   border: none;
 }

@@ -48,7 +48,7 @@ export const DatePicker: React.FC<IDatePicker> = ({ onDateRangeSelected }) => {
         label='Select a date range'
         dateValue={dateValue}
         onDateValueChange={(newValue) => setDateValue(newValue)}
-        width={'300px'}
+        width={80}
         formatDateTime={formatDateTime}
         allowedDateRanges={[[`current-${totalDays}`, 'current']]}
         enableCloseOnSelect

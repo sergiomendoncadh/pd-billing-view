@@ -20,7 +20,8 @@
       "@components/*": ["components/*"],
       "@views/*": ["views/*"],
       "@modules/*": ["modules/*"],
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
+      "@hooks/*": ["hooks/*"]
     }
   },
   "include": ["src", "src/globals.d.ts"]
