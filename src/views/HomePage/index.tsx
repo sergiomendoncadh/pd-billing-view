@@ -11,6 +11,7 @@ import { IOpsSdk } from '@deliveryhero/opsportal';
 import { useGetSummarizedDataQuery } from '@modules/graphql/getSummarizedData.generated';
 import { format } from 'date-fns';
 import { useHandleErrors } from '@hooks/useHandleErrors';
+import { ApolloError } from '@apollo/client';
 
 interface IHomeView {
   baseApi: IOpsSdk;
@@ -41,54 +42,66 @@ export const HomePage: React.FC<IHomeView> = () => {
     if (n >= 1e6 && n < 1e9) return +(n / 1e6).toFixed(1) + 'M';
   };
 
+  const cards = [
+    {
+      title: 'Orders in Billing',
+      formattedValue: formatDataValue(summarizedDataResponse?.ordersTotalCount as number),
+      loading
+    },
+    {
+      title: 'Order failed to be sent to SAP',
+      formattedValue:
+        summarizedDataResponse?.ordersFailedPercentage &&
+        `${summarizedDataResponse?.ordersFailedPercentage}%`,
+      loading
+    },
+    {
+      title: 'Orders sent to SAP',
+      formattedValue: formatDataValue(summarizedDataResponse?.ordersSentCount as number),
+      loading
+    }
+  ];
+
   return (
     <>
       <Container className={styles.billingView}>
         <Flex alignItems='center'>
-          <Text fontSize='large' content='Billing View' />
+          <Text fontSize={"pageTitle"} content='Billing View' />
           <DatePicker
             onDateRangeSelected={(dateRange: [string, string]) => {
               setDateRange(dateRange);
             }}
           />
         </Flex>
-        <Text fontSize={'medium'} content='Summarized Data' margin={'20px'} />
+        <Text fontSize={"sectionTitle"} content='Summarized Data' margin={'20px'} />
         <Flex justifyContent='space-between'>
           <FlexItem maxWidth='lg' className={styles.cardsContainer}>
-            <Card
-              title={'Orders in Billing'}
-              value={formatDataValue(summarizedDataResponse?.ordersTotalCount as number) as string}
-              loading={loading}
-            />
-            <Card
-              title={'Order failed to be sent to SAP'}
-              value={
-                (summarizedDataResponse?.ordersFailedPercentage as number) &&
-                `${summarizedDataResponse?.ordersFailedPercentage as number}%`
-              }
-              loading={loading}
-            />
-            <Card
-              title={'Orders sent to SAP'}
-              value={formatDataValue(summarizedDataResponse?.ordersSentCount as number) as string}
-              loading={loading}
-            />
+            {summarizedDataResponse ? cards.map((card) => {
+              return (
+                <Card
+                  title={card.title}
+                  value={card.formattedValue as number}
+                  loading={loading}
+                  key={card.title}
+                />
+              );
+            }) : null}
           </FlexItem>
           <FlexItem className={styles.divider}>
             <InfoOutlineIcon large className={styles.infoIcon} />
             <Text
-              fontSize='small'
+              fontSize={'paragraph'}
               content='These are overall metrics calculated for the time frame filtered'
               className={styles.information}
             />
           </FlexItem>
         </Flex>
-        <FilterMenu />
+        <FilterMenu error={error as ApolloError} />
       </Container>
       <Flex direction='column' alignItems='center' marginTop={10}>
         <SearchingIllustration width={'100px'} />
         <Text
-          fontSize='small'
+          fontSize={'subSectionTitle'}
           content='Order List Will Be Displayed Here'
           className={styles.information}
         />

@@ -34,7 +34,7 @@ export const GlobalProviders: React.FC<GlobalProvidersProps> = ({
   );
 };
 
-export const App: React.FC<{ baseApi: IOpsSdk }> = ({ baseApi }) => {
+export const App: React.FC<{ baseApi: IOpsSdk; }> = ({ baseApi }) => {
   const client = useApolloClient(baseApi);
 
   useEffect(() => {

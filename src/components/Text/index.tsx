@@ -2,32 +2,28 @@ import React from 'react';
 import { Typography } from '@deliveryhero/armor';
 
 interface ITextProps {
-  fontSize?: 'large' | 'medium' | 'small';
+  fontSize?: 'pageTitle' | 'sectionTitle' | 'subSectionTitle' | 'paragraph';
   content: string | number;
   margin?: string;
   className?: string;
 }
 
 export const Text: React.FC<ITextProps> = ({
-  fontSize = 'medium',
+  fontSize = 'paragraph',
   content,
   margin = '0',
   className
 }) => {
-  const font = { pageTitle: false, sectionTitle: false, subSectionTitle: false };
-  switch (fontSize) {
-    case 'large':
-      font.pageTitle = true;
-      break;
-    case 'medium':
-      font.sectionTitle = true;
-      break;
-    case 'small':
-      font.subSectionTitle = true;
-      break;
-    default:
-      break;
-  }
+  const font = {
+    pageTitle: false,
+    sectionTitle: false,
+    subSectionTitle: false,
+    label: false,
+    paragraph: false
+  };
+
+  font[fontSize] = true;
+
   return (
     <Typography {...font} margin={margin} className={className}>
       {content}
