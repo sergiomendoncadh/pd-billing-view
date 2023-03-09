@@ -18,7 +18,7 @@ export const DatePicker: React.FC<IDatePicker> = ({ onDateRangeSelected }) => {
 
   const [dateValue, setDateValue] = React.useState<[Date, Date]>(() => getDefaultValue);
 
-  const formatDateTime = (value: unknown) =>
+  const formatDateTime = (value: Date) =>
     format(value instanceof Date ? value : new Date(value as string), 'dd.MM.yyyy');
 
   const currentYear = new Date().getFullYear();
