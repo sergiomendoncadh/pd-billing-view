@@ -1,6 +1,6 @@
-import React, { createContext, FC, ReactNode, useContext } from "react";
+import React, { createContext, FC, ReactNode, useContext } from 'react';
 
-import { IOpsSdk } from "@deliveryhero/opsportal";
+import { IOpsSdk } from '@deliveryhero/opsportal';
 
 // Creating context
 const BaseApiContext = createContext<IOpsSdk | undefined>(undefined);
@@ -10,12 +10,12 @@ const BaseApiContext = createContext<IOpsSdk | undefined>(undefined);
  */
 export const BaseApiProvider: FC<BaseApiProviderProps> = ({
   children,
-  baseApi,
+  baseApi
 }: BaseApiProviderProps) => (
   <BaseApiContext.Provider value={baseApi}>{children}</BaseApiContext.Provider>
 );
 
-BaseApiProvider.displayName = "BaseApiProvider";
+BaseApiProvider.displayName = 'BaseApiProvider';
 
 /**
  * hook we use to get access to [[IOpsSdk | BaseApi]]
@@ -23,7 +23,7 @@ BaseApiProvider.displayName = "BaseApiProvider";
 export const useBaseApiContext = (): IOpsSdk => {
   const baseApi = useContext(BaseApiContext);
   if (!baseApi) {
-    throw new Error("Component is beyond BaseApiContext");
+    throw new Error('Component is beyond BaseApiContext');
   }
   return baseApi;
 };

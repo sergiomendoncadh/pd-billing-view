@@ -1,1 +1,1 @@
-export * from "./useApolloClient";
+export * from './useApolloClient';

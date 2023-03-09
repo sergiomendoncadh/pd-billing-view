@@ -1,7 +1,9 @@
-## Jira: 
+## Jira:
+
 [JIRA ID](https://jira.deliveryhero.com/browse/JIRA_ID)
 
 ## Description
+
 (Please add description about the change)
 
 ## Type of Change
@@ -13,4 +15,5 @@
 - [ ] This change requires a documentation update
 
 ## Screenshot
+
 (Add screenshot if relevant to the change)

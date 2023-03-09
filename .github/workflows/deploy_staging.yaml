@@ -2,7 +2,7 @@ name: deploy to staging
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   deploy:
@@ -41,7 +41,7 @@ jobs:
 
       - name: Build
         run: yarn build
-      
+
       - name: Deploy Billing View To Deliveryhero Staging Environment
         run: yarn deploy --destination=stag.Delivery_Hero --use-sts
 
