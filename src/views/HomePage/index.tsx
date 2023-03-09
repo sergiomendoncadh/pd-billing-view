@@ -45,7 +45,7 @@ export const HomePage: React.FC<IHomeView> = () => {
   const cards = [
     {
       title: 'Orders in Billing',
-      formattedValue: formatDataValue(summarizedDataResponse?.ordersTotalCount as number),
+      formattedValue: formatDataValue(Number(summarizedDataResponse?.ordersTotalCount)),
       loading
     },
     {
@@ -57,7 +57,7 @@ export const HomePage: React.FC<IHomeView> = () => {
     },
     {
       title: 'Orders sent to SAP',
-      formattedValue: formatDataValue(summarizedDataResponse?.ordersSentCount as number),
+      formattedValue: formatDataValue(Number(summarizedDataResponse?.ordersSentCount)),
       loading
     }
   ];
@@ -80,7 +80,7 @@ export const HomePage: React.FC<IHomeView> = () => {
               return (
                 <Card
                   title={card.title}
-                  value={card.formattedValue as number}
+                  value={Number(card.formattedValue)}
                   loading={loading}
                   key={card.title}
                 />
