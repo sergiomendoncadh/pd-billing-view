@@ -19,7 +19,7 @@ export const DatePicker: React.FC<IDatePicker> = ({ onDateRangeSelected }) => {
   const [dateValue, setDateValue] = React.useState<[Date, Date]>(() => getDefaultValue);
 
   const formatDateTime = (value: Date) =>
-    format(value instanceof Date ? value : new Date(value as string), 'dd.MM.yyyy');
+    format(new Date(value), 'dd.MM.yyyy');
 
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth();
@@ -39,7 +39,7 @@ export const DatePicker: React.FC<IDatePicker> = ({ onDateRangeSelected }) => {
   React.useEffect(() => {
     const formattedStartDate = dateValue && format(dateValue[0], 'dd.MM.yyyy');
     const formattedEndDate = dateValue && format(dateValue[1], 'dd.MM.yyyy');
-    onDateRangeSelected([formattedStartDate as string, formattedEndDate as string]);
+    onDateRangeSelected([formattedStartDate, formattedEndDate]);
   }, [dateValue]);
 
   return (
