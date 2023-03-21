@@ -1,0 +1,17 @@
+.table {
+  border: 1px solid rgb(219, 219, 219);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  cursor: pointer;
+}
+
+.tableHead {
+  border-bottom: 1px solid rgb(219, 219, 219);
+}
+
+.tableHeadRow {
+  background-color: #f2f2f2;
+}
+
+.tableCell {
+  font-weight: 600;
+}

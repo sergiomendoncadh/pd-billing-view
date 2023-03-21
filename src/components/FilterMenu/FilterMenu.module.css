@@ -37,3 +37,9 @@
   background-color: #ff0000;
   border: none;
 }
+
+.chip {
+  background-color: #cfe2f3;
+  width: 130px;
+  height: 33px;
+}

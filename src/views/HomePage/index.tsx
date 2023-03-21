@@ -12,6 +12,9 @@ import { useGetSummarizedDataQuery } from '@modules/graphql/getSummarizedData.ge
 import { format } from 'date-fns';
 import { useHandleErrors } from '@hooks/useHandleErrors';
 import { ApolloError } from '@apollo/client';
+import { useGetOrderListLazyQuery } from '@modules/graphql/getOrderList.generated';
+import { OrderListTable } from '@components/OrderListTable';
+
 
 interface IHomeView {
   baseApi: IOpsSdk;
@@ -26,14 +29,15 @@ export const HomePage: React.FC<IHomeView> = () => {
     const formattedYesterday = format(yesterday, 'dd.MM.yyyy');
     return [formattedYesterday, formattedToday];
   });
+  const [orderList, setOrderList] = React.useState([]);
 
-  const { data, loading, error } = useGetSummarizedDataQuery({
+  const { data, loading, error: summarizedDataError } = useGetSummarizedDataQuery({
     variables: {
-      filter: { endDate: dateRange && dateRange[1], startDate: dateRange && dateRange[0] }
+      filter: { startDate: dateRange && dateRange[0], endDate: dateRange && dateRange[1] }
     }
   });
 
-  useHandleErrors(error);
+  useHandleErrors(summarizedDataError);
   const summarizedDataResponse = data?.summarizedData;
 
   const formatDataValue = (n: number) => {
@@ -45,7 +49,7 @@ export const HomePage: React.FC<IHomeView> = () => {
   const cards = [
     {
       title: 'Orders in Billing',
-      formattedValue: formatDataValue(Number(summarizedDataResponse?.ordersTotalCount)),
+      formattedValue: typeof summarizedDataResponse?.ordersTotalCount !== 'undefined' && formatDataValue(Number(summarizedDataResponse?.ordersTotalCount)),
       loading
     },
     {
@@ -57,10 +61,30 @@ export const HomePage: React.FC<IHomeView> = () => {
     },
     {
       title: 'Orders sent to SAP',
-      formattedValue: formatDataValue(Number(summarizedDataResponse?.ordersSentCount)),
+      formattedValue: typeof summarizedDataResponse?.ordersSentCount !== 'undefined' && formatDataValue(Number(summarizedDataResponse?.ordersSentCount)),
       loading
     }
   ];
+
+  const [fetchOrderList, { data: ordersData }] = useGetOrderListLazyQuery();
+  const orderListData = ordersData?.billingViewOrderList;
+
+  React.useEffect(() => {
+    if (orderListData) {
+      setOrderList(orderListData);
+    }
+  }, [orderListData]);
+
+  const getOrderList = (status: string) => {
+    fetchOrderList({
+      variables: {
+        // TODO: remove the filters once the bff is done
+        filter: { startDate: dateRange[0], endDate: dateRange[1], status: status.toLowerCase(), isBillable: true, isReceiptable: true, isWastage: false, pageLimit: 20, pageNumber: 1 }
+      }
+    });
+  };
+
+  const isOrderListEmpty = !!(orderList.length === 0);
 
   return (
     <>
@@ -73,39 +97,41 @@ export const HomePage: React.FC<IHomeView> = () => {
             }}
           />
         </Flex>
-        <Text fontSize={"sectionTitle"} content='Summarized Data' margin={'20px'} />
-        <Flex justifyContent='space-between'>
-          <FlexItem maxWidth='lg' className={styles.cardsContainer}>
-            {summarizedDataResponse ? cards.map((card) => {
-              return (
-                <Card
-                  title={card.title}
-                  value={Number(card.formattedValue)}
-                  loading={loading}
-                  key={card.title}
-                />
-              );
-            }) : null}
-          </FlexItem>
-          <FlexItem className={styles.divider}>
-            <InfoOutlineIcon large className={styles.infoIcon} />
-            <Text
-              fontSize={'paragraph'}
-              content='These are overall metrics calculated for the time frame filtered'
-              className={styles.information}
-            />
-          </FlexItem>
-        </Flex>
-        <FilterMenu error={error as ApolloError} />
+        {isOrderListEmpty && <>
+          <Text fontSize={"sectionTitle"} content='Summarized Data' margin={'20px'} />
+          <Flex justifyContent='space-between'>
+            <FlexItem maxWidth='lg' className={styles.cardsContainer}>
+              {summarizedDataResponse ? cards.map((card) => {
+                return (
+                  <Card
+                    title={card.title}
+                    value={card.formattedValue as number}
+                    loading={loading}
+                    key={card.title}
+                  />
+                );
+              }) : null}
+            </FlexItem>
+            <FlexItem className={styles.divider}>
+              <InfoOutlineIcon large className={styles.infoIcon} />
+              <Text
+                fontSize={'paragraph'}
+                content='These are overall metrics calculated for the time frame filtered'
+                className={styles.information}
+              />
+            </FlexItem>
+          </Flex>
+        </>}
+        <FilterMenu summarizedDataError={summarizedDataError as ApolloError} getOrderList={getOrderList} />
+        {isOrderListEmpty ? <Flex direction='column' alignItems='center' marginTop={10}>
+          <SearchingIllustration width={'100px'} />
+          <Text
+            fontSize={'subSectionTitle'}
+            content='Order List Will Be Displayed Here'
+            className={styles.information}
+          />
+        </Flex> : <OrderListTable orderList={orderList} />}
       </Container>
-      <Flex direction='column' alignItems='center' marginTop={10}>
-        <SearchingIllustration width={'100px'} />
-        <Text
-          fontSize={'subSectionTitle'}
-          content='Order List Will Be Displayed Here'
-          className={styles.information}
-        />
-      </Flex>
     </>
   );
 };
