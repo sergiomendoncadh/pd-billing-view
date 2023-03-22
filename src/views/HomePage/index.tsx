@@ -45,19 +45,19 @@ export const HomePage: React.FC<IHomeView> = () => {
   const cards = [
     {
       title: 'Orders in Billing',
-      formattedValue: formatDataValue(Number(summarizedDataResponse?.ordersTotalCount)),
+      formattedValue: loading ? 0 : formatDataValue(Number(summarizedDataResponse?.ordersTotalCount)),
       loading
     },
     {
       title: 'Order failed to be sent to SAP',
       formattedValue:
-        summarizedDataResponse?.ordersFailedPercentage &&
+      loading ? 0 : summarizedDataResponse?.ordersFailedPercentage &&
         `${summarizedDataResponse?.ordersFailedPercentage}%`,
       loading
     },
     {
       title: 'Orders sent to SAP',
-      formattedValue: formatDataValue(Number(summarizedDataResponse?.ordersSentCount)),
+      formattedValue: loading ? 0 : formatDataValue(Number(summarizedDataResponse?.ordersSentCount)),
       loading
     }
   ];
@@ -76,11 +76,11 @@ export const HomePage: React.FC<IHomeView> = () => {
         <Text fontSize={"sectionTitle"} content='Summarized Data' margin={'20px'} />
         <Flex justifyContent='space-between'>
           <FlexItem maxWidth='lg' className={styles.cardsContainer}>
-            {summarizedDataResponse ? cards.map((card) => {
+            {!loading ? cards.map((card) => {
               return (
                 <Card
                   title={card.title}
-                  value={Number(card.formattedValue)}
+                  value={card.formattedValue}
                   loading={loading}
                   key={card.title}
                 />

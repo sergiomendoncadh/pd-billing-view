@@ -11,6 +11,7 @@ interface ICard {
 }
 
 export const Card: React.FC<ICard> = ({ title, value, loading }) => {
+  console.log(title, value, loading)
   return (
     <Box className={styles.card}>
       <Text fontSize={'subSectionTitle'} content={title} className={styles.title} />
