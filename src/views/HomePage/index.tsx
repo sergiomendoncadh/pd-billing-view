@@ -33,6 +33,10 @@ export const HomePage: React.FC<IHomeView> = () => {
     }
   });
 
+  const handleFetchOrderList = (filterQuery: any) => {
+    console.log(filterQuery);
+  }
+
   useHandleErrors(error);
   const summarizedDataResponse = data?.summarizedData;
 
@@ -45,19 +49,18 @@ export const HomePage: React.FC<IHomeView> = () => {
   const cards = [
     {
       title: 'Orders in Billing',
-      formattedValue: loading ? 0 : formatDataValue(Number(summarizedDataResponse?.ordersTotalCount)),
+      formattedValue: loading ? '0' : formatDataValue(Number(summarizedDataResponse?.ordersTotalCount)),
       loading
     },
     {
       title: 'Order failed to be sent to SAP',
-      formattedValue:
-      loading ? 0 : summarizedDataResponse?.ordersFailedPercentage &&
+      formattedValue: loading ? '0' : summarizedDataResponse?.ordersFailedPercentage &&
         `${summarizedDataResponse?.ordersFailedPercentage}%`,
       loading
     },
     {
       title: 'Orders sent to SAP',
-      formattedValue: loading ? 0 : formatDataValue(Number(summarizedDataResponse?.ordersSentCount)),
+      formattedValue: loading ? '0' : formatDataValue(Number(summarizedDataResponse?.ordersSentCount)),
       loading
     }
   ];
@@ -80,7 +83,7 @@ export const HomePage: React.FC<IHomeView> = () => {
               return (
                 <Card
                   title={card.title}
-                  value={card.formattedValue}
+                  value={card.formattedValue || '0'}
                   loading={loading}
                   key={card.title}
                 />
@@ -96,7 +99,7 @@ export const HomePage: React.FC<IHomeView> = () => {
             />
           </FlexItem>
         </Flex>
-        <FilterMenu error={error as ApolloError} />
+        <FilterMenu error={error as ApolloError} handleFetchOrderList={handleFetchOrderList}/>
       </Container>
       <Flex direction='column' alignItems='center' marginTop={10}>
         <SearchingIllustration width={'100px'} />
