@@ -29,8 +29,9 @@ export const HomePage: React.FC<IHomeView> = () => {
     const formattedYesterday = format(yesterday, 'dd.MM.yyyy');
     return [formattedYesterday, formattedToday];
   });
-  const [orderList, setOrderList] = React.useState([]);
-  const [hasMoreData, setHasMoredata] = React.useState(false);
+  const [orderList, setOrderList] = React.useState(() => []);
+  //TODO: remove
+  const [nextSetOrders, setNextSetOrders] = React.useState(() => []);
   const { data, loading, error: summarizedDataError } = useGetSummarizedDataQuery({
     variables: {
       filter: { startDate: dateRange && dateRange[0], endDate: dateRange && dateRange[1] }
@@ -69,11 +70,58 @@ export const HomePage: React.FC<IHomeView> = () => {
   const [fetchOrderList, { data: ordersData }] = useGetOrderListLazyQuery();
   const orderListData = ordersData?.billingViewOrderList;
 
+  const fetchNextSetOrders = () => {
+    //TODO: remove
+    setNextSetOrders([{
+      'OrderCode': 'test-code',
+      'VendorCode': 'test',
+      'OrderStatus': 'status',
+      'OrderPlacedAt': '2022-02-20 12:00:00',
+      'OrderUpdatedAt': '2022-02-20 12:00:00',
+      'IsBillable': true
+    },
+    {
+      'OrderCode': 'test-code',
+      'VendorCode': 'test',
+      'OrderStatus': 'status',
+      'OrderPlacedAt': '2022-02-20 12:00:00',
+      'OrderUpdatedAt': '2022-02-20 12:00:00',
+      'IsBillable': true
+    },
+    {
+      'OrderCode': 'test-code',
+      'VendorCode': 'test',
+      'OrderStatus': 'status',
+      'OrderPlacedAt': '2022-02-20 12:00:00',
+      'OrderUpdatedAt': '2022-02-20 12:00:00',
+      'IsBillable': true
+    },
+    {
+      'OrderCode': 'test-code',
+      'VendorCode': 'test',
+      'OrderStatus': 'status',
+      'OrderPlacedAt': '2022-02-20 12:00:00',
+      'OrderUpdatedAt': '2022-02-20 12:00:00',
+      'IsBillable': true
+    },
+    {
+      'OrderCode': 'test-code',
+      'VendorCode': 'test',
+      'OrderStatus': 'status',
+      'OrderPlacedAt': '2022-02-20 12:00:00',
+      'OrderUpdatedAt': '2022-02-20 12:00:00',
+      'IsBillable': true
+    }] as never);
+  };
+
   React.useEffect(() => {
     if (orderListData) {
       setOrderList(orderListData);
+      if (nextSetOrders.length > 0) {
+        setOrderList(orderListData.concat(nextSetOrders));
+      }
     }
-  }, [orderListData]);
+  }, [orderListData, nextSetOrders]);
 
   const getOrderList = (status: string) => {
     fetchOrderList({
@@ -85,59 +133,6 @@ export const HomePage: React.FC<IHomeView> = () => {
   };
 
   const isOrderListEmpty = !!(orderList.length === 0);
-
-  //TODO: remove
-  const fetchNextSetOrders = () => {
-    //TODO: pass the status
-    console.log('called');
-
-    setHasMoredata(true);
-    return [{
-      'OrderCode': 'test-code',
-      'VendorCode': 'test',
-      //TODO: add selected status
-      'OrderStatus': 'status',
-      'OrderPlacedAt': '2022-02-20 12:00:00',
-      'OrderUpdatedAt': '2022-02-20 12:00:00',
-      'IsBillable': true
-    },
-    {
-      'OrderCode': 'test-code',
-      'VendorCode': 'test',
-      //TODO: add selected status
-      'OrderStatus': 'status',
-      'OrderPlacedAt': '2022-02-20 12:00:00',
-      'OrderUpdatedAt': '2022-02-20 12:00:00',
-      'IsBillable': true
-    },
-    {
-      'OrderCode': 'test-code',
-      'VendorCode': 'test',
-      //TODO: add selected status
-      'OrderStatus': 'status',
-      'OrderPlacedAt': '2022-02-20 12:00:00',
-      'OrderUpdatedAt': '2022-02-20 12:00:00',
-      'IsBillable': true
-    },
-    {
-      'OrderCode': 'test-code',
-      'VendorCode': 'test',
-      //TODO: add selected status
-      'OrderStatus': 'status',
-      'OrderPlacedAt': '2022-02-20 12:00:00',
-      'OrderUpdatedAt': '2022-02-20 12:00:00',
-      'IsBillable': true
-    },
-    {
-      'OrderCode': 'test-code',
-      'VendorCode': 'test',
-      //TODO: add selected status
-      'OrderStatus': 'status',
-      'OrderPlacedAt': '2022-02-20 12:00:00',
-      'OrderUpdatedAt': '2022-02-20 12:00:00',
-      'IsBillable': true
-    }];
-  };
 
   return (
     <>
@@ -183,7 +178,7 @@ export const HomePage: React.FC<IHomeView> = () => {
             content='Order List Will Be Displayed Here'
             className={styles.information}
           />
-        </Flex> : <OrderListTable orderList={orderList} fetchNextSetOrders={fetchNextSetOrders} hasMoreData={hasMoreData} />}
+        </Flex> : <OrderListTable orderList={orderList} fetchNextSetOrders={fetchNextSetOrders} />}
       </Container>
     </>
   );
