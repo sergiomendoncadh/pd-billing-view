@@ -77,7 +77,7 @@ export const HomePage: React.FC<IHomeView> = () => {
           />
         </Flex>
         <Text fontSize={"sectionTitle"} content='Summarized Data' margin={'20px'} />
-        <Flex justifyContent='space-between'>
+        <Flex justifyContent='space-between' alignItems="center">
           <FlexItem maxWidth='lg' className={styles.cardsContainer}>
             {!loading ? cards.map((card) => {
               return (
