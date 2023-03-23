@@ -10,6 +10,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  _Any: any;
+  _FieldSet: any;
 };
 
 export type AggregatorApiRequest = {
@@ -75,6 +77,22 @@ export type DataPage = {
 export type DataSort = {
   sort?: InputMaybe<SortDirection>;
   sortBy?: InputMaybe<SortableReceivableField>;
+};
+
+export type Entity = {
+  __typename?: 'Entity';
+  findProductByProductID: Product;
+  findVendorByCode: Vendor;
+};
+
+
+export type EntityFindProductByProductIdArgs = {
+  productID: Scalars['String'];
+};
+
+
+export type EntityFindVendorByCodeArgs = {
+  code: Scalars['String'];
 };
 
 /** FilterQuery input definition */
@@ -255,8 +273,17 @@ export enum Permissions {
   TaxView = 'TAX_VIEW'
 }
 
+/** Vendor type definition */
+export type Product = {
+  __typename?: 'Product';
+  billingPrice?: Maybe<Scalars['Float']>;
+  productID: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  _entities: Array<Maybe<_Entity>>;
+  _service: _Service;
   billingViewOrderList: Array<Maybe<OrderItem>>;
   calculationConfig: CalculationConfigResponse;
   calculationTemplates: Array<CalculationTemplate>;
@@ -270,7 +297,11 @@ export type Query = {
   templateContent: TemplateContent;
   totalOpenBalance: Scalars['Float'];
   vendor: Vendor;
-  vendors: Array<Maybe<Vendor>>;
+};
+
+
+export type Query_EntitiesArgs = {
+  representations: Array<Scalars['_Any']>;
 };
 
 
@@ -320,14 +351,10 @@ export type QueryVendorArgs = {
   vendorCode: Scalars['String'];
 };
 
-
-export type QueryVendorsArgs = {
-  filter?: InputMaybe<VendorsFilterInput>;
-};
-
 /** Receipt type definition */
 export type Receipt = {
   __typename?: 'Receipt';
+  createdAt?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   path?: Maybe<Scalars['String']>;
   type?: Maybe<ReceiptType>;
@@ -495,10 +522,10 @@ export type UpdateVendorCalculationConfigInput = {
 /** Vendor type definition */
 export type Vendor = {
   __typename?: 'Vendor';
-  chainId?: Maybe<Scalars['String']>;
+  ServiceFee?: Maybe<Scalars['Int']>;
+  VatID?: Maybe<Scalars['Int']>;
+  calcConfigTemplateId?: Maybe<Scalars['Int']>;
   code: Scalars['String'];
-  legalName?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
 };
 
 /** Vendors input definition */
@@ -506,4 +533,11 @@ export type VendorsFilterInput = {
   legalName?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   vendorsCode?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type _Entity = Product | Vendor;
+
+export type _Service = {
+  __typename?: '_Service';
+  sdl?: Maybe<Scalars['String']>;
 };

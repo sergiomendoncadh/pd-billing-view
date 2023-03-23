@@ -30,7 +30,7 @@ export const HomePage: React.FC<IHomeView> = () => {
     return [formattedYesterday, formattedToday];
   });
   const [orderList, setOrderList] = React.useState([]);
-
+  const [hasMoreData, setHasMoredata] = React.useState(false);
   const { data, loading, error: summarizedDataError } = useGetSummarizedDataQuery({
     variables: {
       filter: { startDate: dateRange && dateRange[0], endDate: dateRange && dateRange[1] }
@@ -86,11 +86,64 @@ export const HomePage: React.FC<IHomeView> = () => {
 
   const isOrderListEmpty = !!(orderList.length === 0);
 
+  //TODO: remove
+  const fetchNextSetOrders = () => {
+    //TODO: pass the status
+    console.log('called');
+
+    setHasMoredata(true);
+    return [{
+      'OrderCode': 'test-code',
+      'VendorCode': 'test',
+      //TODO: add selected status
+      'OrderStatus': 'status',
+      'OrderPlacedAt': '2022-02-20 12:00:00',
+      'OrderUpdatedAt': '2022-02-20 12:00:00',
+      'IsBillable': true
+    },
+    {
+      'OrderCode': 'test-code',
+      'VendorCode': 'test',
+      //TODO: add selected status
+      'OrderStatus': 'status',
+      'OrderPlacedAt': '2022-02-20 12:00:00',
+      'OrderUpdatedAt': '2022-02-20 12:00:00',
+      'IsBillable': true
+    },
+    {
+      'OrderCode': 'test-code',
+      'VendorCode': 'test',
+      //TODO: add selected status
+      'OrderStatus': 'status',
+      'OrderPlacedAt': '2022-02-20 12:00:00',
+      'OrderUpdatedAt': '2022-02-20 12:00:00',
+      'IsBillable': true
+    },
+    {
+      'OrderCode': 'test-code',
+      'VendorCode': 'test',
+      //TODO: add selected status
+      'OrderStatus': 'status',
+      'OrderPlacedAt': '2022-02-20 12:00:00',
+      'OrderUpdatedAt': '2022-02-20 12:00:00',
+      'IsBillable': true
+    },
+    {
+      'OrderCode': 'test-code',
+      'VendorCode': 'test',
+      //TODO: add selected status
+      'OrderStatus': 'status',
+      'OrderPlacedAt': '2022-02-20 12:00:00',
+      'OrderUpdatedAt': '2022-02-20 12:00:00',
+      'IsBillable': true
+    }];
+  };
+
   return (
     <>
       <Container className={styles.billingView}>
         <Flex alignItems='center'>
-          <Text fontSize={"pageTitle"} content='Billing View' />
+          <Text fontSize='pageTitle' content='Billing View' />
           <DatePicker
             onDateRangeSelected={(dateRange: [string, string]) => {
               setDateRange(dateRange);
@@ -98,7 +151,7 @@ export const HomePage: React.FC<IHomeView> = () => {
           />
         </Flex>
         {isOrderListEmpty && <>
-          <Text fontSize={"sectionTitle"} content='Summarized Data' margin={'20px'} />
+          <Text fontSize='sectionTitle' content='Summarized Data' margin={'20px'} />
           <Flex justifyContent='space-between'>
             <FlexItem maxWidth='lg' className={styles.cardsContainer}>
               {summarizedDataResponse ? cards.map((card) => {
@@ -115,7 +168,7 @@ export const HomePage: React.FC<IHomeView> = () => {
             <FlexItem className={styles.divider}>
               <InfoOutlineIcon large className={styles.infoIcon} />
               <Text
-                fontSize={'paragraph'}
+                fontSize='paragraph'
                 content='These are overall metrics calculated for the time frame filtered'
                 className={styles.information}
               />
@@ -130,7 +183,7 @@ export const HomePage: React.FC<IHomeView> = () => {
             content='Order List Will Be Displayed Here'
             className={styles.information}
           />
-        </Flex> : <OrderListTable orderList={orderList} />}
+        </Flex> : <OrderListTable orderList={orderList} fetchNextSetOrders={fetchNextSetOrders} hasMoreData={hasMoreData} />}
       </Container>
     </>
   );

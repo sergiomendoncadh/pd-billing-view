@@ -1,3 +1,10 @@
+.tableContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .table {
   border: 1px solid rgb(219, 219, 219);
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;

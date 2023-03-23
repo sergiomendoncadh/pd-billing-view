@@ -13,7 +13,7 @@ interface IFilterMenu {
 }
 
 export const FilterMenu: React.FC<IFilterMenu> = ({ summarizedDataError, getOrderList }) => {
-  const [status, setStatus] = React.useState('Delivered');
+  const [status, setStatus] = React.useState('Sent');
   const [orderListAvailable, setOrderListAvailable] = React.useState(false);
   const onOrderCodeSearch = () => {
     getOrderList(status);
@@ -22,9 +22,11 @@ export const FilterMenu: React.FC<IFilterMenu> = ({ summarizedDataError, getOrde
   };
   return (
     <form className={styles.searchFiltersContainer}>
-      <Text fontSize={'subSectionTitle'} content={orderListAvailable ? 'Selected Filters' : 'Search Filters'} margin={'0 0 20px 0'} />
+      <Text fontSize='subSectionTitle' content={orderListAvailable ? 'Selected Filters' : 'Search Filters'} margin={'0 0 20px 0'} />
       <Flex alignItems='center'>
-        {orderListAvailable ? <Tag label={status} deleteOption="enabled" marginRight={3} className={styles.chip} /> :
+        {orderListAvailable ? <Box minWidth={30} >
+          <Tag wide deleteOption="enabled" className={styles.chip} ><Text content={status} fontSize='paragraph' className={styles.chipText} /></Tag>
+        </Box> :
           <>
             <SearchInput />
             <Dropdown options={STATUS_OPIONS} label='Status' onChange={e => setStatus(STATUS_OPIONS[e.target.value])} />
@@ -38,6 +40,6 @@ export const FilterMenu: React.FC<IFilterMenu> = ({ summarizedDataError, getOrde
           </Button>
         </Box>
       </Flex>
-    </form>
+    </form >
   );
 };

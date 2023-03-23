@@ -13,11 +13,11 @@ interface ICard {
 export const Card: React.FC<ICard> = ({ title, value, loading }) => {
   return (
     <Box className={styles.card}>
-      <Text fontSize={'subSectionTitle'} content={title} className={styles.title} />
+      <Text fontSize='subSectionTitle' content={title} className={styles.title} />
       {loading ? (
         <LoadingSpinner width='50px' secondary />
       ) : (
-        <Text fontSize={'pageTitle'} content={value} className={styles.value} />
+        <Text fontSize='pageTitle' content={value} className={styles.value} />
       )}
     </Box>
   );
