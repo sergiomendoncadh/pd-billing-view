@@ -8,23 +8,27 @@ export type GetOrderListQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetOrderListQuery = { __typename?: 'Query', billingViewOrderList: Array<{ __typename?: 'OrderItem', OrderCode: string, VendorCode: string, StatusCode?: number | null, IsWastage?: boolean | null, IsBillable?: boolean | null, IsReceiptable?: boolean | null, OrderSource?: string | null, Vertical?: string | null, OrderPlacedAt?: string | null, OrderUpdatedAt?: string | null, LatestEventType?: string | null } | null> };
+export type GetOrderListQuery = { __typename?: 'Query', billingViewOrderList: { __typename?: 'OrderList', Orders: Array<{ __typename?: 'OrderItem', Status: string, LatestEventType?: string | null, OrderCode: string, VendorCode: string, OrderUpdatedAt?: string | null, IsBillable?: boolean | null, EntityId?: string | null, OrderPlacedAt?: string | null } | null>, PagingKey: { __typename?: 'PagingKeyType', flow?: string | null, orderCode?: string | null, orderPlacedAt?: string | null } } };
 
 
 export const GetOrderListDocument = gql`
     query GetOrderList($filter: FilterQueryInput!) {
   billingViewOrderList(filter: $filter) {
-    OrderCode
-    VendorCode
-    StatusCode
-    IsWastage
-    IsBillable
-    IsReceiptable
-    OrderSource
-    Vertical
-    OrderPlacedAt
-    OrderUpdatedAt
-    LatestEventType
+    Orders {
+      Status
+      LatestEventType
+      OrderCode
+      VendorCode
+      OrderUpdatedAt
+      IsBillable
+      EntityId
+      OrderPlacedAt
+    }
+    PagingKey {
+      flow
+      orderCode
+      orderPlacedAt
+    }
   }
 }
     `;

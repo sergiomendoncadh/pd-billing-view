@@ -80,15 +80,10 @@ export type DataSort = {
 /** FilterQuery input definition */
 export type FilterQueryInput = {
   endDate: Scalars['String'];
-  isBillable: Scalars['Boolean'];
-  isReceiptable: Scalars['Boolean'];
-  isWastage: Scalars['Boolean'];
-  pageLimit: Scalars['Int'];
-  pageNumber: Scalars['Int'];
+  lastEvaluatedKey: PagingKey;
   searchTerm?: InputMaybe<Scalars['String']>;
   startDate: Scalars['String'];
   status: Scalars['String'];
-  summarizedDataType?: InputMaybe<Scalars['String']>;
 };
 
 /** Invoice type definition */
@@ -194,16 +189,18 @@ export type OrderItem = {
   __typename?: 'OrderItem';
   EntityId?: Maybe<Scalars['String']>;
   IsBillable?: Maybe<Scalars['Boolean']>;
-  IsReceiptable?: Maybe<Scalars['Boolean']>;
-  IsWastage?: Maybe<Scalars['Boolean']>;
   LatestEventType?: Maybe<Scalars['String']>;
   OrderCode: Scalars['String'];
   OrderPlacedAt?: Maybe<Scalars['String']>;
-  OrderSource?: Maybe<Scalars['String']>;
   OrderUpdatedAt?: Maybe<Scalars['String']>;
-  StatusCode?: Maybe<Scalars['Int']>;
+  Status: Scalars['String'];
   VendorCode: Scalars['String'];
-  Vertical?: Maybe<Scalars['String']>;
+};
+
+export type OrderList = {
+  __typename?: 'OrderList';
+  Orders: Array<Maybe<OrderItem>>;
+  PagingKey: PagingKeyType;
 };
 
 /**  PaginatedReceivableList type definition  */
@@ -211,6 +208,20 @@ export type PaginatedReceivableList = {
   __typename?: 'PaginatedReceivableList';
   nodes?: Maybe<Array<Receivable>>;
   totalCount?: Maybe<Scalars['Int']>;
+};
+
+/** PagingKey input definition */
+export type PagingKey = {
+  flow?: InputMaybe<Scalars['String']>;
+  orderCode?: InputMaybe<Scalars['String']>;
+  orderPlacedAt?: InputMaybe<Scalars['String']>;
+};
+
+export type PagingKeyType = {
+  __typename?: 'PagingKeyType';
+  flow?: Maybe<Scalars['String']>;
+  orderCode?: Maybe<Scalars['String']>;
+  orderPlacedAt?: Maybe<Scalars['String']>;
 };
 
 export type ParentAggregatorApiResponse = {
@@ -257,7 +268,7 @@ export enum Permissions {
 
 export type Query = {
   __typename?: 'Query';
-  billingViewOrderList: Array<Maybe<OrderItem>>;
+  billingViewOrderList: OrderList;
   calculationConfig: CalculationConfigResponse;
   calculationTemplates: Array<CalculationTemplate>;
   invoices: Array<Maybe<Invoice>>;

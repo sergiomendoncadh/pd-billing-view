@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Flex, FlexItem } from '@deliveryhero/armor';
+import { Container, Flex, FlexItem, Table, TableBody, TableCell, TableHead, TableRow } from '@deliveryhero/armor';
 import { InfoOutlineIcon } from '@deliveryhero/armor-icons';
 import { SearchingIllustration } from '@deliveryhero/armor-illustrations';
 import styles from './HomePage.module.css';
@@ -12,6 +12,7 @@ import { useGetSummarizedDataQuery } from '@modules/graphql/getSummarizedData.ge
 import { format } from 'date-fns';
 import { useHandleErrors } from '@hooks/useHandleErrors';
 import { ApolloError } from '@apollo/client';
+import { useGetOrderListQuery } from '@modules/graphql/getOrderList.generated';
 
 interface IHomeView {
   baseApi: IOpsSdk;
@@ -30,6 +31,22 @@ export const HomePage: React.FC<IHomeView> = () => {
   const { data, loading, error } = useGetSummarizedDataQuery({
     variables: {
       filter: { endDate: dateRange && dateRange[1], startDate: dateRange && dateRange[0] }
+    }
+  });
+
+  // TODO: Correctly configure
+  const {data: odata, loading: oloading, error: oerror} = useGetOrderListQuery({
+    variables: {
+      filter: {
+        startDate: '2023-03-22',
+        endDate: '2023-03-24',
+        status: 'sent',
+        lastEvaluatedKey: {
+          flow: '',
+          orderCode: '',
+          orderPlacedAt: ''
+        }
+      }
     }
   });
 

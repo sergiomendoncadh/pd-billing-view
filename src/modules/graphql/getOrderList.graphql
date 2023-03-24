@@ -1,15 +1,19 @@
 query GetOrderList($filter: FilterQueryInput!) {
   billingViewOrderList(filter: $filter) {
-    OrderCode
-    VendorCode
-    StatusCode
-    IsWastage
-    IsBillable
-    IsReceiptable
-    OrderSource
-    Vertical
-    OrderPlacedAt
-    OrderUpdatedAt
-    LatestEventType
+    Orders {
+      Status
+      LatestEventType
+      OrderCode
+      VendorCode
+      OrderUpdatedAt
+      IsBillable
+      EntityId
+      OrderPlacedAt
+    },
+    PagingKey {
+      flow
+      orderCode
+      orderPlacedAt
+    }
   }
 }
