@@ -1880,6 +1880,17 @@
     xml2js "0.4.23"
     yamux-js "0.1.0"
 
+"@deliveryhero/armor-datepicker@1.9.3":
+  version "1.9.3"
+  resolved "https://npm.pkg.github.com/download/@deliveryhero/armor-datepicker/1.9.3/ecc3a14e20c126dd3af9db88759abed2d812d164#ecc3a14e20c126dd3af9db88759abed2d812d164"
+  integrity sha512-7TJF5EMV+U0rvkYgvoMY+OnQI9i+RBHqN8RoQxhld5ooWAvOeBVyXr6dwh5k4KVVfcX+lKsimHWozMzwxnX+7g==
+  dependencies:
+    "@deliveryhero/armor" "1.117.0"
+    "@deliveryhero/armor-icons" "1.29.0"
+    "@deliveryhero/armor-system" "1.17.2"
+    prop-types "^15.7.2"
+    rifm "^0.12.1"
+
 "@deliveryhero/armor-datepicker@^1.9.0":
   version "1.9.2"
   resolved "https://npm.pkg.github.com/download/@deliveryhero/armor-datepicker/1.9.2/b663bc4232f1069e85c6f9defbc9c24d0face686#b663bc4232f1069e85c6f9defbc9c24d0face686"
@@ -1890,6 +1901,18 @@
     "@deliveryhero/armor-system" "1.17.2"
     prop-types "^15.7.2"
     rifm "^0.12.1"
+
+"@deliveryhero/armor-filter@^1.2.3":
+  version "1.2.3"
+  resolved "https://npm.pkg.github.com/download/@deliveryhero/armor-filter/1.2.3/7e5b7e9f15c7e9b74cd8352060dfd1e676244520#7e5b7e9f15c7e9b74cd8352060dfd1e676244520"
+  integrity sha512-papVNrIH7eSvFp4fzYRwruLNePWqzPM/GtXMXdOkq6qk4zXdq4WjeG2rvycxJ3pL+broknJ4MzxY/MYtgKBCeg==
+  dependencies:
+    "@deliveryhero/armor" "1.117.0"
+    "@deliveryhero/armor-datepicker" "1.9.3"
+    "@deliveryhero/armor-system" "1.17.2"
+    clone-deep "^4.0.1"
+    prop-types "^15.7.2"
+    query-string "^7.0.0"
 
 "@deliveryhero/armor-icons@1.27.5", "@deliveryhero/armor-icons@^1.27.5":
   version "1.27.5"
@@ -1905,6 +1928,16 @@
   version "1.28.0"
   resolved "https://npm.pkg.github.com/download/@deliveryhero/armor-icons/1.28.0/c8635fb6212e88814a6c1513cf98e4aba74ea58b#c8635fb6212e88814a6c1513cf98e4aba74ea58b"
   integrity sha512-0d883pYfJrQNk4UumjtBnXa4/tMeEznP15GdK7OqfVRgwRsVHHgGcwJ8H3Icq96MyvHh9g7Ann7VCBTBuYnMuA==
+  dependencies:
+    "@deliveryhero/armor-system" "1.17.2"
+    dom-parser "^0.1.6"
+    ejs "^3.1.5"
+    prop-types "^15.7.2"
+
+"@deliveryhero/armor-icons@1.29.0":
+  version "1.29.0"
+  resolved "https://npm.pkg.github.com/download/@deliveryhero/armor-icons/1.29.0/2c2393217b4127f52205c31f7772306de6d85d5f#2c2393217b4127f52205c31f7772306de6d85d5f"
+  integrity sha512-DpvPkls0i31bvx7/DXp+aQRHEG/OI8qBEQZF80JmEFX+9IdxM1Nyyw3HB+XCCsEm33m0MJutNkecr+laHLeK/Q==
   dependencies:
     "@deliveryhero/armor-system" "1.17.2"
     dom-parser "^0.1.6"
@@ -1966,6 +1999,23 @@
   integrity sha512-OrYPijBSALdKQ4TKkP+IPZIzNCsH6ziIk4g4feX/oridOj1Qt4vzjmLINhF0P+MTr27XZql3/+EhSy3Y4k38HA==
   dependencies:
     "@deliveryhero/armor-icons" "1.28.0"
+    "@deliveryhero/armor-system" "1.17.2"
+    "@popperjs/core" "^2.4.2"
+    clone-deep "^4.0.1"
+    lodash "^4.17.21"
+    merge-props "^5.0.3"
+    prop-types "^15.7.2"
+    query-string "^7.0.0"
+    react-transition-group "^4.4.2"
+    rifm "^0.12.1"
+    throttle-debounce "2.1.0"
+
+"@deliveryhero/armor@1.117.0":
+  version "1.117.0"
+  resolved "https://npm.pkg.github.com/download/@deliveryhero/armor/1.117.0/96e757591af83fbce3cd92723e8e040e63da56d2#96e757591af83fbce3cd92723e8e040e63da56d2"
+  integrity sha512-Z4MIHKZso2roQbxdZB+hBs5WLKjyNU3Hcd/Wv/pUiG9/UMSYXGYYX0bq1FwFuStxWIjWmcOma8XQqzO6WuU1nQ==
+  dependencies:
+    "@deliveryhero/armor-icons" "1.29.0"
     "@deliveryhero/armor-system" "1.17.2"
     "@popperjs/core" "^2.4.2"
     clone-deep "^4.0.1"
