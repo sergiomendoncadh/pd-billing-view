@@ -12,6 +12,7 @@ import {
 import { format } from 'date-fns';
 import { Container, Table, TableBody, TableCell, TableHead, TableRow, Tag, Typography } from '@deliveryhero/armor';
 import styles from './HomeView.module.css';
+import { DatabaseIllustration, EmptyCartIllustration } from '@deliveryhero/armor-illustrations';
 
 interface IHomeView {
     baseApi: IOpsSdk;
@@ -185,28 +186,35 @@ export const HomeView: React.FC<IHomeView> = () => {
 
     return (
         <Container maxWidth={"90%"}>
-            <div>Billing View</div>
+            <div className={styles.titleSection}>
+                <Typography sectionTitle>Billing View</Typography>
+            </div>
             <div className={styles.summarizedSection}>
-                <div className={styles.cardContainer}>
-                    <Typography className={styles.cardLabel} label medium>Orders in Billing</Typography>
-                    <div className={styles.cardDataSet}>
-                        <Typography>125</Typography>
-                        <Typography paragraph>M</Typography>
+                <div className={styles.cardSection}>
+                    <div className={styles.cardContainer}>
+                        <Typography className={styles.cardLabel} label medium>Orders in Billing</Typography>
+                        <div className={styles.cardDataSet}>
+                            <Typography pageTitle>12,500,345</Typography>
+                        </div>
+                    </div>
+                    <div className={styles.cardContainer}>
+                        <Typography className={styles.cardLabel} label medium>Orders Failed to Be Sent to SAP</Typography>
+                        <div className={styles.cardDataSet}>
+                            <Typography pageTitle>2.77</Typography>
+                            <Typography sectionTitle>%</Typography>
+                        </div>
+                    </div>
+                    <div className={styles.cardContainer}>
+                        <Typography className={styles.cardLabel} label medium>Orders Sent to SAP</Typography>
+                        <div className={styles.cardDataSet}>
+                            <Typography pageTitle>10,456,900</Typography>
+                        </div>
                     </div>
                 </div>
-                <div className={styles.cardContainer}>
-                    <Typography className={styles.cardLabel} label medium>Orders Failed to Be Sent to SAP</Typography>
-                    <div className={styles.cardDataSet}>
-                        <Typography>2.77</Typography>
-                        <Typography paragraph>%</Typography>
-                    </div>
-                </div>
-                <div className={styles.cardContainer}>
-                    <Typography className={styles.cardLabel} label medium>Orders Sent to SAP</Typography>
-                    <div className={styles.cardDataSet}>
-                        <Typography>10</Typography>
-                        <Typography paragraph>M</Typography>
-                    </div>
+
+                <div className={styles.informationSection}>
+                    <DatabaseIllustration width='150px' marginRight={10}/>
+                    <Typography paragraph>Select the data tiles to apply specific filters</Typography>
                 </div>
             </div>
             <div>
@@ -224,7 +232,7 @@ export const HomeView: React.FC<IHomeView> = () => {
                 </FilterLayout>
             </div>
             <div>
-                <Table width={"100%"} marginTop={5} stickyHead>
+                {/* <Table width={"100%"} marginTop={5} stickyHead>
                     <TableHead>
                         <TableRow>
                             <TableCell>Entity</TableCell>
@@ -233,11 +241,11 @@ export const HomeView: React.FC<IHomeView> = () => {
                             <TableCell>Status</TableCell>
                             <TableCell>Billable</TableCell>
                             <TableCell>Order Placed At</TableCell>
-                            {/* <TableCell>Order Updated At</TableCell> */}
                             <TableCell>Payload</TableCell>
                         </TableRow>
-                    </TableHead>
-                    <TableBody>
+                    </TableHead> */}
+                {/* for empty order list */}
+                {/* <TableBody>
                         {sampleMockCall.data.billingViewOrderList.Orders.map(order => {
                             return (
                                 <TableRow>
@@ -252,13 +260,18 @@ export const HomeView: React.FC<IHomeView> = () => {
                                         }
                                     </TableCell>
                                     <TableCell>{order.OrderPlacedAt}</TableCell>
-                                    {/* <TableCell>{order.OrderUpdatedAt}</TableCell> */}
                                     <TableCell>{'TBD'}</TableCell>
                                 </TableRow>
                             );
                         })}
-                    </TableBody>
-                </Table>
+                    </TableBody> */}
+                {/* </Table> */}
+
+                <div className={styles.emptyOrderList}>
+                    <EmptyCartIllustration width='200px' />
+                    <Typography paragraph large>No orders to show</Typography>
+                    <Typography paragraph>Change your filters or check if the order code is correct</Typography>
+                </div>
             </div>
         </Container>
     );
