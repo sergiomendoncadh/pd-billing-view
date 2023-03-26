@@ -10,7 +10,8 @@ import {
     FilterDateConditionType
 } from '@deliveryhero/armor-filter';
 import { format } from 'date-fns';
-import { Container, Flex, Table, TableBody, TableCell, TableHead, TableRow } from '@deliveryhero/armor';
+import { Container, Table, TableBody, TableCell, TableHead, TableRow, Tag, Typography } from '@deliveryhero/armor';
+import styles from './HomeView.module.css';
 
 interface IHomeView {
     baseApi: IOpsSdk;
@@ -185,19 +186,31 @@ export const HomeView: React.FC<IHomeView> = () => {
     return (
         <Container maxWidth={"90%"}>
             <div>Billing View</div>
-            <div>
-                <div>
-                    Orders in Billing
+            <div className={styles.summarizedSection}>
+                <div className={styles.cardContainer}>
+                    <Typography className={styles.cardLabel} label medium>Orders in Billing</Typography>
+                    <div className={styles.cardDataSet}>
+                        <Typography>125</Typography>
+                        <Typography paragraph>M</Typography>
+                    </div>
                 </div>
-                <div>
-                    Orders Failed to Be Sent to SAP
+                <div className={styles.cardContainer}>
+                    <Typography className={styles.cardLabel} label medium>Orders Failed to Be Sent to SAP</Typography>
+                    <div className={styles.cardDataSet}>
+                        <Typography>2.77</Typography>
+                        <Typography paragraph>%</Typography>
+                    </div>
                 </div>
-                <div>
-                    Orders Sent to SAP
+                <div className={styles.cardContainer}>
+                    <Typography className={styles.cardLabel} label medium>Orders Sent to SAP</Typography>
+                    <div className={styles.cardDataSet}>
+                        <Typography>10</Typography>
+                        <Typography paragraph>M</Typography>
+                    </div>
                 </div>
             </div>
             <div>
-                <FilterLayout tall>
+                <FilterLayout tall className={styles.filterSection}>
                     <FilterEditor
                         schema={filterSchema}
                         value={filterValue}
@@ -220,7 +233,7 @@ export const HomeView: React.FC<IHomeView> = () => {
                             <TableCell>Status</TableCell>
                             <TableCell>Billable</TableCell>
                             <TableCell>Order Placed At</TableCell>
-                            <TableCell>Order Updated At</TableCell>
+                            {/* <TableCell>Order Updated At</TableCell> */}
                             <TableCell>Payload</TableCell>
                         </TableRow>
                     </TableHead>
@@ -232,9 +245,14 @@ export const HomeView: React.FC<IHomeView> = () => {
                                     <TableCell>{order.OrderCode}</TableCell>
                                     <TableCell>{order.VendorCode}</TableCell>
                                     <TableCell>{order.Status}</TableCell>
-                                    <TableCell>{order.IsBillable.toString()}</TableCell>
+                                    <TableCell>
+                                        {order.IsBillable
+                                            ? <Tag type={'approved'}>{order.IsBillable.toString()}</Tag>
+                                            : <Tag type={'denied'}>{order.IsBillable.toString()}</Tag>
+                                        }
+                                    </TableCell>
                                     <TableCell>{order.OrderPlacedAt}</TableCell>
-                                    <TableCell>{order.OrderUpdatedAt}</TableCell>
+                                    {/* <TableCell>{order.OrderUpdatedAt}</TableCell> */}
                                     <TableCell>{'TBD'}</TableCell>
                                 </TableRow>
                             );

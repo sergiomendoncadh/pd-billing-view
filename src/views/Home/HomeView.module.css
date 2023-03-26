@@ -1,0 +1,33 @@
+/* card section */
+
+.summarizedSection {
+    display: flex;
+    margin: 24px 10px;
+    width: 100%;
+}
+
+.cardContainer {
+    border: 1px solid lightgrey;
+    padding: 10px;
+    min-width: 220px;
+    height: 100%;
+    margin-right: 20px;
+    border-radius: 5%;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 4px 10px;
+}
+
+.cardDataSet {
+    display: flex;
+    margin: 0;
+    align-items: baseline;
+}
+
+.cardLabel {
+    opacity: 0.4;
+}
+
+/* filter menu */
+
+.filterSection {
+    padding: 15px 30px;
+}
