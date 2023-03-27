@@ -7,7 +7,7 @@ import { ApolloClient, ApolloProvider } from '@apollo/client';
 import { useApolloClient } from '@modules/common/hooks/useApolloClient';
 import { BaseApiProvider } from '@modules/common/context';
 import styled from 'styled-components';
-import HomeView from '@views/Home/HomeView';
+import HomeView from './views/Home/HomeView';
 
 const Wrapper = styled(Box)`
   background-color: #fff;
