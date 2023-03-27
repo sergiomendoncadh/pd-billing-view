@@ -31,7 +31,7 @@ const OrderList: React.FC<IOrderLisProps> = ({ orderList, isOrderListEmpty, pagi
 
     const displayOrderInfoPage = (orderCode: string) => {
         let urlSegments = window.location.href.split('/');
-        let orderInfoUrl = `${window.location.host}/${urlSegments[3]}/p/ops-portal-billing#/order/${orderCode}`;
+        let orderInfoUrl = `https://${window.location.host}/${urlSegments[3]}/p/ops-portal-billing#/order/${orderCode}`;
         window.open(orderInfoUrl)
     }
 

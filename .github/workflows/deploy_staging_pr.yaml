@@ -12,7 +12,7 @@ jobs:
       STS_KEY: ${{ secrets.STS_KEY_STG }}
       STS_KEY_ID: ${{ secrets.STS_KEY_ID_STG }}
       STS_CLIENT_ID: 'ops-portal-billing-view'
-      STS_ISSUER: 'https://sts-st.deliveryhero.io'
+      STS_ISSUER: 'https://sts-eu.deliveryhero.io'
       GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
     strategy:

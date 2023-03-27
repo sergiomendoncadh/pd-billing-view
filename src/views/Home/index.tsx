@@ -201,6 +201,7 @@ export const HomeView: React.FC<IHomeView> = () => {
                         endDate: getConditionValue(value?.conditions, 'endDate'),
                         status: getConditionValue(value?.conditions, 'status'),
                         lastEvaluatedKey: {},
+                        searchTerm: getConditionValue(value?.conditions, 'search')
                     }
                 }
             });
