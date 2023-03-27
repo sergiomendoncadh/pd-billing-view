@@ -161,7 +161,7 @@ const initialOrderSet: IOrderSet = {
     pagingKey: {},
 }
 
-const HomeView: React.FC<IHomeView> = () => {
+export const HomeView: React.FC<IHomeView> = () => {
     const [storedValue, setStoredValue] = useFilterURLStorage('filterA');
     const [filterValue, setFilterValue] = React.useState<FilterConditionValueType | undefined>(storedValue);
     const [orderSet, setOrderSet] = React.useState<IOrderSet>(initialOrderSet);
@@ -268,5 +268,3 @@ const HomeView: React.FC<IHomeView> = () => {
         </Container>
     );
 };
-
-export default HomeView;

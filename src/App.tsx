@@ -7,7 +7,7 @@ import { ApolloClient, ApolloProvider } from '@apollo/client';
 import { useApolloClient } from '@modules/common/hooks/useApolloClient';
 import { BaseApiProvider } from '@modules/common/context';
 import styled from 'styled-components';
-import HomeView from './views/Home/HomeView';
+import { HomeView } from '@views/Home';
 
 const Wrapper = styled(Box)`
   background-color: #fff;
@@ -48,7 +48,6 @@ export const App: React.FC<{ baseApi: IOpsSdk; }> = ({ baseApi }) => {
         <I18nextProvider i18n={baseApi.getI18nInstance()}>
           <Router history={createPluginHistory(baseApi)}>
             <Switch>
-              {/* <Route path='/' render={() => <HomePage baseApi={baseApi} />} exact /> */}
               <Route path='/' render={() => <HomeView baseApi={baseApi} />} exact />
             </Switch>
           </Router>
