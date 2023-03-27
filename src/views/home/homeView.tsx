@@ -2,45 +2,32 @@ import React from 'react';
 import { IOpsSdk } from '@deliveryhero/opsportal';
 import {
     FilterConditionValueType,
-    FilterEditor,
-    FilterLayout,
     useFilterURLStorage,
-    FilterEnumConditionType,
-    FilterConditionSchemaType,
-    FilterDateConditionType
+    FilterConditionValueElementOrGroupType
 } from '@deliveryhero/armor-filter';
-import { format } from 'date-fns';
 import { Container, Table, TableBody, TableCell, TableHead, TableRow, Tag, Typography } from '@deliveryhero/armor';
 import styles from './HomeView.module.css';
 import { DatabaseIllustration, EmptyCartIllustration } from '@deliveryhero/armor-illustrations';
+import { useGetSummarizedDataQuery } from '@modules/graphql/getSummarizedData.generated';
+import { useGetOrderListLazyQuery } from '@modules/graphql/getOrderList.generated';
+import FilterMenu from '@modules/components/FilterMenu/FilterMenu';
+import OrderList from '@modules/components/OrderList/OrderList';
+import { OrderItem } from '@modules/types.graphql';
 
 interface IHomeView {
     baseApi: IOpsSdk;
 }
 
-const filterSchema: FilterConditionSchemaType = {
-    conditions: [
-        {
-            id: 'search',
-            label: 'Search Orders',
-        },
-        {
-            id: 'status',
-            label: 'Status',
-            typeId: 'statusEnum',
-        },
-        {
-            id: 'startDate',
-            label: 'Start Date',
-            typeId: 'startDate',
-        },
-        {
-            id: 'endDate',
-            label: 'End Date',
-            typeId: 'endDate',
-        },
-    ]
-};
+interface IPagingKey {
+    flow: string;
+    orderCode: string;
+    orderPlacedAt: string;
+}
+
+interface IOrderSet {
+    orders: OrderItem[];
+    pagingKey: IPagingKey | null;
+}
 
 // TODO: replace with actual call
 const sampleMockCall = {
@@ -147,42 +134,82 @@ const sampleMockCall = {
     }
 };
 
-const conditionTypes = [
-    FilterEnumConditionType.create('statusEnum', {
-        options: [
-            { label: 'Received', value: 'received' },
-            { label: 'Sent', value: 'sent' },
-            { label: 'Cancelled', value: 'cancelled' },
-            { label: 'Failed', value: 'failed' },
-        ],
-    }),
-    FilterDateConditionType.create('startDate', {
-        formatDateTime: (value: unknown) =>
-            format(
-                value instanceof Date ? value : new Date(value as string),
-                'yyyy.MM.dd',
-            ),
-    }),
-    FilterDateConditionType.create('endDate', {
-        formatDateTime: (value: unknown) =>
-            format(
-                value instanceof Date ? value : new Date(value as string),
-                'yyyy.MM.dd',
-            ),
-    }),
-]
+const getConditionValue = (conditions: FilterConditionValueElementOrGroupType[] | undefined, filterId: string): string => {
+    let conditionMap: any = {};
 
-export const HomeView: React.FC<IHomeView> = () => {
+    if (!conditions) return '';
+
+    conditions.map((ctd: FilterConditionValueElementOrGroupType) => {
+        if (ctd.id?.indexOf('Date') !== -1) {
+            ctd.value = formatExpectedDate(ctd.value as string)
+        }
+
+        conditionMap[ctd?.id ?? ''] = ctd.value;
+    });
+
+    return conditionMap[filterId];
+}
+
+const formatExpectedDate = (date: string) => {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+
+const initialOrderSet: IOrderSet = {
+    orders: [],
+    pagingKey: null,
+}
+
+const HomeView: React.FC<IHomeView> = () => {
     const [storedValue, setStoredValue] = useFilterURLStorage('filterA');
     const [filterValue, setFilterValue] = React.useState<FilterConditionValueType | undefined>(storedValue);
+    const [orderSet, setOrderSet] = React.useState<IOrderSet>(initialOrderSet);
+
+    const { data: sumdata, loading: sumloading, error: sumerror } = useGetSummarizedDataQuery({
+        variables: {
+            filter: {
+                startDate: getConditionValue(filterValue?.conditions, 'startDate'),
+                endDate: getConditionValue(filterValue?.conditions, 'endDate'),
+            }
+        }
+    });
+
+    const [getOrderList, { data: orderdata, loading: orderloading, error: ordererror }] = useGetOrderListLazyQuery();
+
+    React.useEffect(() => {
+        if (orderdata?.billingViewOrderList.orders) {
+            setOrderSet({...orderSet, orders: [...orderSet.orders, ...orderdata?.billingViewOrderList.orders as OrderItem[]]})
+        }
+    }, [orderdata])
 
     const setFilterValueCommon: any = React.useCallback(
         (value: FilterConditionValueType) => {
             setStoredValue(value);
             setFilterValue(value);
+
+            // call for updating the order list
+            getOrderList({
+                variables: {
+                    filter: {
+                        startDate: getConditionValue(value?.conditions, 'startDate'),
+                        endDate: getConditionValue(value?.conditions, 'endDate'),
+                        status: getConditionValue(value?.conditions, 'status'),
+                        lastEvaluatedKey: {},
+                    }
+                }
+            });
         },
         [setStoredValue, setFilterValue],
     );
+
+    const isOrderListEmpty = (orderSet.orders.length == 0);
 
     return (
         <Container maxWidth={"90%"}>
@@ -194,85 +221,32 @@ export const HomeView: React.FC<IHomeView> = () => {
                     <div className={styles.cardContainer}>
                         <Typography className={styles.cardLabel} label medium>Orders in Billing</Typography>
                         <div className={styles.cardDataSet}>
-                            <Typography pageTitle>12,500,345</Typography>
+                            <Typography pageTitle>{sumdata?.summarizedData.ordersTotalCount}</Typography>
                         </div>
                     </div>
                     <div className={styles.cardContainer}>
                         <Typography className={styles.cardLabel} label medium>Orders Failed to Be Sent to SAP</Typography>
                         <div className={styles.cardDataSet}>
-                            <Typography pageTitle>2.77</Typography>
+                            <Typography pageTitle>{sumdata?.summarizedData.ordersFailedPercentage}</Typography>
                             <Typography sectionTitle>%</Typography>
                         </div>
                     </div>
                     <div className={styles.cardContainer}>
                         <Typography className={styles.cardLabel} label medium>Orders Sent to SAP</Typography>
                         <div className={styles.cardDataSet}>
-                            <Typography pageTitle>10,456,900</Typography>
+                            <Typography pageTitle>{sumdata?.summarizedData.ordersSentCount}</Typography>
                         </div>
                     </div>
                 </div>
 
                 <div className={styles.informationSection}>
-                    <DatabaseIllustration width='150px' marginRight={10}/>
+                    <DatabaseIllustration width='150px' marginRight={10} />
                     <Typography paragraph>Select the data tiles to apply specific filters</Typography>
                 </div>
             </div>
-            <div>
-                <FilterLayout tall className={styles.filterSection}>
-                    <FilterEditor
-                        schema={filterSchema}
-                        value={filterValue}
-                        types={conditionTypes}
-                        onValueChange={setFilterValueCommon}
-                        enableCloseButton={false}
-                        paddingTop={6}
-                        layout="horizontal"
-                        nonce
-                    />
-                </FilterLayout>
-            </div>
-            <div>
-                {/* <Table width={"100%"} marginTop={5} stickyHead>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Entity</TableCell>
-                            <TableCell>Order Code</TableCell>
-                            <TableCell>Vendor Code</TableCell>
-                            <TableCell>Status</TableCell>
-                            <TableCell>Billable</TableCell>
-                            <TableCell>Order Placed At</TableCell>
-                            <TableCell>Payload</TableCell>
-                        </TableRow>
-                    </TableHead> */}
-                {/* for empty order list */}
-                {/* <TableBody>
-                        {sampleMockCall.data.billingViewOrderList.Orders.map(order => {
-                            return (
-                                <TableRow>
-                                    <TableCell>{order.EntityId}</TableCell>
-                                    <TableCell>{order.OrderCode}</TableCell>
-                                    <TableCell>{order.VendorCode}</TableCell>
-                                    <TableCell>{order.Status}</TableCell>
-                                    <TableCell>
-                                        {order.IsBillable
-                                            ? <Tag type={'approved'}>{order.IsBillable.toString()}</Tag>
-                                            : <Tag type={'denied'}>{order.IsBillable.toString()}</Tag>
-                                        }
-                                    </TableCell>
-                                    <TableCell>{order.OrderPlacedAt}</TableCell>
-                                    <TableCell>{'TBD'}</TableCell>
-                                </TableRow>
-                            );
-                        })}
-                    </TableBody> */}
-                {/* </Table> */}
 
-                <div className={styles.emptyOrderList}>
-                    <EmptyCartIllustration width='200px' />
-                    <Typography paragraph large>No orders to show</Typography>
-                    <Typography paragraph>Change your filters or check if the order code is correct</Typography>
-                </div>
-            </div>
+            <FilterMenu filterValue={filterValue} setFilterValueCommon={setFilterValueCommon} />
+            <OrderList isOrderListEmpty={isOrderListEmpty} orderList={orderSet.orders} />
         </Container>
     );
 };

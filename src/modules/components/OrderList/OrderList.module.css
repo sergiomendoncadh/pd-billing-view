@@ -1,0 +1,12 @@
+.orderListSection {
+    /* this is subject to change */
+    height: 700px;       
+    overflow-y: scroll;   
+}
+
+.emptyOrderList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 55px;
+}

@@ -8,23 +8,26 @@ export type GetOrderListQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetOrderListQuery = { __typename?: 'Query', billingViewOrderList: Array<{ __typename?: 'OrderItem', OrderCode: string, VendorCode: string, StatusCode?: number | null, IsWastage?: boolean | null, IsBillable?: boolean | null, IsReceiptable?: boolean | null, OrderSource?: string | null, Vertical?: string | null, OrderPlacedAt?: string | null, OrderUpdatedAt?: string | null, LatestEventType?: string | null } | null> };
+export type GetOrderListQuery = { __typename?: 'Query', billingViewOrderList: { __typename?: 'OrderList', orders: Array<{ __typename?: 'OrderItem', status: string, orderCode: string, vendorCode: string, orderUpdatedAt?: string | null, orderPlacedAt?: string | null, isBillable?: boolean | null, entityId?: string | null } | null>, pagingKey: { __typename?: 'PagingKeyType', flow?: string | null, orderCode?: string | null, orderPlacedAt?: string | null } } };
 
 
 export const GetOrderListDocument = gql`
     query GetOrderList($filter: FilterQueryInput!) {
   billingViewOrderList(filter: $filter) {
-    OrderCode
-    VendorCode
-    StatusCode
-    IsWastage
-    IsBillable
-    IsReceiptable
-    OrderSource
-    Vertical
-    OrderPlacedAt
-    OrderUpdatedAt
-    LatestEventType
+    orders {
+      status
+      orderCode
+      vendorCode
+      orderUpdatedAt
+      orderPlacedAt
+      isBillable
+      entityId
+    }
+    pagingKey {
+      flow
+      orderCode
+      orderPlacedAt
+    }
   }
 }
     `;
