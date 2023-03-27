@@ -12,21 +12,15 @@ import { useGetSummarizedDataQuery } from '@modules/graphql/getSummarizedData.ge
 import { useGetOrderListLazyQuery } from '@modules/graphql/getOrderList.generated';
 import FilterMenu from '@modules/components/FilterMenu/FilterMenu';
 import OrderList from '@modules/components/OrderList/OrderList';
-import { OrderItem } from '@modules/types.graphql';
+import { OrderItem, PagingKey } from '@modules/types.graphql';
 
 interface IHomeView {
     baseApi: IOpsSdk;
 }
 
-interface IPagingKey {
-    flow: string;
-    orderCode: string;
-    orderPlacedAt: string;
-}
-
 interface IOrderSet {
     orders: OrderItem[];
-    pagingKey: IPagingKey | null;
+    pagingKey: PagingKey;
 }
 
 // TODO: replace with actual call
@@ -164,7 +158,7 @@ const formatExpectedDate = (date: string) => {
 
 const initialOrderSet: IOrderSet = {
     orders: [],
-    pagingKey: null,
+    pagingKey: {},
 }
 
 const HomeView: React.FC<IHomeView> = () => {
@@ -185,7 +179,11 @@ const HomeView: React.FC<IHomeView> = () => {
 
     React.useEffect(() => {
         if (orderdata?.billingViewOrderList.orders) {
-            setOrderSet({...orderSet, orders: [...orderSet.orders, ...orderdata?.billingViewOrderList.orders as OrderItem[]]})
+            setOrderSet({
+                ...orderSet,
+                orders: [...orderSet.orders, ...orderdata?.billingViewOrderList.orders as OrderItem[]],
+                pagingKey: { ...orderdata.billingViewOrderList.pagingKey },
+            })
         }
     }, [orderdata])
 
@@ -193,6 +191,7 @@ const HomeView: React.FC<IHomeView> = () => {
         (value: FilterConditionValueType) => {
             setStoredValue(value);
             setFilterValue(value);
+            setOrderSet(initialOrderSet);
 
             // call for updating the order list
             getOrderList({
@@ -208,6 +207,20 @@ const HomeView: React.FC<IHomeView> = () => {
         },
         [setStoredValue, setFilterValue],
     );
+
+    const fetchNextOrderSet = () => {
+        console.log('fetch next set');
+        getOrderList({
+            variables: {
+                filter: {
+                    startDate: getConditionValue(filterValue?.conditions, 'startDate'),
+                    endDate: getConditionValue(filterValue?.conditions, 'endDate'),
+                    status: getConditionValue(filterValue?.conditions, 'status'),
+                    lastEvaluatedKey: { ...orderSet.pagingKey },
+                }
+            }
+        });
+    }
 
     const isOrderListEmpty = (orderSet.orders.length == 0);
 
@@ -246,7 +259,12 @@ const HomeView: React.FC<IHomeView> = () => {
             </div>
 
             <FilterMenu filterValue={filterValue} setFilterValueCommon={setFilterValueCommon} />
-            <OrderList isOrderListEmpty={isOrderListEmpty} orderList={orderSet.orders} />
+            <OrderList
+                isOrderListEmpty={isOrderListEmpty}
+                orderList={orderSet.orders}
+                pagingKey={orderSet.pagingKey}
+                fetchNextOrderSet={fetchNextOrderSet}
+            />
         </Container>
     );
 };

@@ -10,3 +10,8 @@
     align-items: center;
     margin-top: 55px;
 }
+
+.disableIcon {
+    opacity: 0.4;
+    cursor: none;
+}
