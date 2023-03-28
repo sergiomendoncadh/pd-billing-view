@@ -15,3 +15,9 @@
     opacity: 0.4;
     cursor: none;
 }
+
+.tableCellWhite {
+    background: white;
+    border-bottom: 1px solid lightgray;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}

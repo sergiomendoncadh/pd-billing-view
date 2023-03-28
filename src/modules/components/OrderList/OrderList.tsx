@@ -48,14 +48,14 @@ const OrderList: React.FC<IOrderLisProps> = ({ orderList, isOrderListEmpty, pagi
                 <Table width={"100%"} marginTop={5} stickyHead>
                     <TableHead>
                         <TableRow>
-                            <TableCell contentAlignX='center'>Entity</TableCell>
-                            <TableCell contentAlignX='center'>Order Code</TableCell>
-                            <TableCell contentAlignX='center'>Vendor Code</TableCell>
-                            <TableCell contentAlignX='center'>Status</TableCell>
-                            <TableCell contentAlignX='center'>Billable</TableCell>
-                            <TableCell contentAlignX='center'>Order Placed At</TableCell>
-                            <TableCell contentAlignX='center'>Order Updated At</TableCell>
-                            <TableCell contentAlignX='center'>Actions</TableCell>
+                            <TableCell className={styles.tableCellWhite}  contentAlignX='center'>Entity</TableCell>
+                            <TableCell className={styles.tableCellWhite}  contentAlignX='center'>Order Code</TableCell>
+                            <TableCell className={styles.tableCellWhite}  contentAlignX='center'>Vendor Code</TableCell>
+                            <TableCell className={styles.tableCellWhite}  contentAlignX='center'>Status</TableCell>
+                            <TableCell className={styles.tableCellWhite}  contentAlignX='center'>Billable</TableCell>
+                            <TableCell className={styles.tableCellWhite}  contentAlignX='center'>Order Placed At</TableCell>
+                            <TableCell className={styles.tableCellWhite}  contentAlignX='center'>Order Updated At</TableCell>
+                            <TableCell className={styles.tableCellWhite}  contentAlignX='center'>Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     {orderList && orderList.length > 0 &&
