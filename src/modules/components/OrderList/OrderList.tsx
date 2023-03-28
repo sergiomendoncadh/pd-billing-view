@@ -48,13 +48,14 @@ const OrderList: React.FC<IOrderLisProps> = ({ orderList, isOrderListEmpty, pagi
                 <Table width={"100%"} marginTop={5} stickyHead>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Entity</TableCell>
-                            <TableCell>Order Code</TableCell>
-                            <TableCell>Vendor Code</TableCell>
-                            <TableCell>Status</TableCell>
-                            <TableCell>Billable</TableCell>
-                            <TableCell>Order Placed At</TableCell>
-                            <TableCell>Actions</TableCell>
+                            <TableCell contentAlignX='center'>Entity</TableCell>
+                            <TableCell contentAlignX='center'>Order Code</TableCell>
+                            <TableCell contentAlignX='center'>Vendor Code</TableCell>
+                            <TableCell contentAlignX='center'>Status</TableCell>
+                            <TableCell contentAlignX='center'>Billable</TableCell>
+                            <TableCell contentAlignX='center'>Order Placed At</TableCell>
+                            <TableCell contentAlignX='center'>Order Updated At</TableCell>
+                            <TableCell contentAlignX='center'>Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     {orderList && orderList.length > 0 &&
@@ -62,22 +63,24 @@ const OrderList: React.FC<IOrderLisProps> = ({ orderList, isOrderListEmpty, pagi
                             {orderList.map(order => {
                                 return (
                                     <TableRow>
-                                        <TableCell>{order?.entityId}</TableCell>
-                                        <TableCell>{order?.orderCode}</TableCell>
-                                        <TableCell>{order?.vendorCode}</TableCell>
-                                        <TableCell>{order?.status}</TableCell>
-                                        <TableCell>
+                                        <TableCell contentAlignX='center'>{order?.entityId}</TableCell>
+                                        <TableCell contentAlignX='center'>{order?.orderCode}</TableCell>
+                                        <TableCell contentAlignX='center'>{order?.vendorCode}</TableCell>
+                                        <TableCell contentAlignX='center'>{order?.status}</TableCell>
+                                        <TableCell contentAlignX='center'>
                                             {order?.isBillable
                                                 ? <Tag type={'approved'}>{order?.isBillable.toString()}</Tag>
                                                 : <Tag type={'denied'}>{order?.isBillable ? order.isBillable.toString() : 'false'}</Tag>
                                             }
                                         </TableCell>
-                                        <TableCell>{order?.orderPlacedAt}</TableCell>
-                                        <TableCell>
+                                        <TableCell contentAlignX='center'>{order?.orderPlacedAt}</TableCell>
+                                        <TableCell contentAlignX='center'>{order?.orderUpdatedAt}</TableCell>
+                                        <TableCell contentAlignX='center'>
                                             <Box
                                                 style={{
                                                     display: 'flex',
                                                     alignItems: 'center',
+                                                    justifyContent: 'center',
                                                 }}
                                                 height={6}
                                             >
@@ -87,7 +90,7 @@ const OrderList: React.FC<IOrderLisProps> = ({ orderList, isOrderListEmpty, pagi
                                                     </TableAction>
                                                 </Tooltip>
                                                 <Tooltip content="Displays Billing Engine payload for the order mentioned" disableInteractive>
-                                                    <TableAction marginRight={6}>
+                                                    <TableAction>
                                                         <FileCommonTextIcon className={styles.disableIcon} large />
                                                     </TableAction>
                                                 </Tooltip>

@@ -12,7 +12,7 @@ import { useGetOrderListLazyQuery } from '@modules/graphql/getOrderList.generate
 import FilterMenu from '@modules/components/FilterMenu/FilterMenu';
 import OrderList from '@modules/components/OrderList/OrderList';
 import { OrderItem, PagingKey } from '@modules/types.graphql';
-import { getConditionValue } from '@utils/helper';
+import { formatExpectedDate, getConditionValue } from '@utils/helper';
 
 interface IHomeView {
     baseApi: IOpsSdk;
@@ -40,14 +40,33 @@ export const HomeView: React.FC<IHomeView> = () => {
 
     // handle initial state
     React.useEffect(() => {
+        // set default values
+        let initialDate = formatExpectedDate(new Date().toISOString()),
+            initialState = (getConditionValue(filterValue?.conditions, 'startDate').length == 0 || getConditionValue(filterValue?.conditions, 'endDate').length == 0),
+            currentStatus = getConditionValue(filterValue?.conditions, 'status'),
+            currentSearchTerm = getConditionValue(filterValue?.conditions, 'search');
+
         getSummarizedData({
             variables: {
                 filter: {
-                    startDate: getConditionValue(filterValue?.conditions, 'startDate'),
-                    endDate: getConditionValue(filterValue?.conditions, 'endDate'),
+                    startDate: initialState ? initialDate : getConditionValue(filterValue?.conditions, 'startDate'),
+                    endDate: initialState ? initialDate : getConditionValue(filterValue?.conditions, 'endDate'),
                 }
             }
-        })
+        });
+
+        getOrderList({
+            variables: {
+                filter: {
+                    startDate: initialState ? initialDate : getConditionValue(filterValue?.conditions, 'endDate'),
+                    endDate: initialState ? initialDate : getConditionValue(filterValue?.conditions, 'endDate'),
+                    searchTerm: currentSearchTerm?.length == 0 ? '' : currentSearchTerm,
+                    status: currentStatus?.length == 0 ? 'sent' : currentStatus,
+                    lastEvaluatedKey: {},
+                }
+            },
+            fetchPolicy: "no-cache",
+        });
     }, []);
 
     React.useEffect(() => {
@@ -65,6 +84,15 @@ export const HomeView: React.FC<IHomeView> = () => {
             setStoredValue(value);
             setFilterValue(value);
             setOrderSet(initialOrderSet);
+
+            getSummarizedData({
+                variables: {
+                    filter: {
+                        startDate: getConditionValue(value?.conditions, 'startDate'),
+                        endDate: getConditionValue(value?.conditions, 'endDate'),
+                    }
+                },
+            });
 
             // call for updating the order list
             getOrderList({
