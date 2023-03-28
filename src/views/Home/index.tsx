@@ -8,7 +8,7 @@ import {
 import { Container, Table, TableBody, TableCell, TableHead, TableRow, Tag, Typography } from '@deliveryhero/armor';
 import styles from './HomeView.module.css';
 import { DatabaseIllustration, EmptyCartIllustration } from '@deliveryhero/armor-illustrations';
-import { useGetSummarizedDataQuery } from '@modules/graphql/getSummarizedData.generated';
+import { useGetSummarizedDataLazyQuery, useGetSummarizedDataQuery } from '@modules/graphql/getSummarizedData.generated';
 import { useGetOrderListLazyQuery } from '@modules/graphql/getOrderList.generated';
 import FilterMenu from '@modules/components/FilterMenu/FilterMenu';
 import OrderList from '@modules/components/OrderList/OrderList';
@@ -166,16 +166,22 @@ export const HomeView: React.FC<IHomeView> = () => {
     const [filterValue, setFilterValue] = React.useState<FilterConditionValueType | undefined>(storedValue);
     const [orderSet, setOrderSet] = React.useState<IOrderSet>(initialOrderSet);
 
-    const { data: sumdata, loading: sumloading, error: sumerror } = useGetSummarizedDataQuery({
-        variables: {
-            filter: {
-                startDate: getConditionValue(filterValue?.conditions, 'startDate'),
-                endDate: getConditionValue(filterValue?.conditions, 'endDate'),
-            }
-        }
-    });
-
+    const [getSummarizedData, { data: sumdata, loading: sumloading, error: sumerror }] = useGetSummarizedDataLazyQuery();
     const [getOrderList, { data: orderdata, loading: orderloading, error: ordererror }] = useGetOrderListLazyQuery();
+
+    console.log(orderSet);
+
+    // handle initial state
+    React.useEffect(() => {
+        getSummarizedData({
+            variables: {
+                filter: {
+                    startDate: getConditionValue(filterValue?.conditions, 'startDate'),
+                    endDate: getConditionValue(filterValue?.conditions, 'endDate'),
+                }
+            }
+        })
+    }, []);
 
     React.useEffect(() => {
         if (orderdata?.billingViewOrderList.orders) {
@@ -203,7 +209,8 @@ export const HomeView: React.FC<IHomeView> = () => {
                         lastEvaluatedKey: {},
                         searchTerm: getConditionValue(value?.conditions, 'search')
                     }
-                }
+                },
+                fetchPolicy: "no-cache",
             });
         },
         [setStoredValue, setFilterValue],
@@ -211,6 +218,7 @@ export const HomeView: React.FC<IHomeView> = () => {
 
     const fetchNextOrderSet = () => {
         console.log('fetch next set');
+
         getOrderList({
             variables: {
                 filter: {

@@ -36,14 +36,16 @@ const OrderList: React.FC<IOrderLisProps> = ({ orderList, isOrderListEmpty, pagi
     }
 
     return (
-        <div className={styles.orderListSection}>
-            <InfiniteScroll
+        <div>
+            {!isOrderListEmpty && <InfiniteScroll
                 dataLength={orderList?.length}
-                next={() => fetchNextOrderSet()}
                 loader={hasMoreOrders && <Box className={styles.spinner}><LoadingSpinner width='100px' secondary /></Box>}
                 hasMore={hasMoreOrders}
+                next={fetchNextOrderSet}
+                height={700}
+                style={{ overflowY: 'scroll' }}
             >
-                {!isOrderListEmpty && <Table width={"100%"} marginTop={5} stickyHead>
+                <Table width={"100%"} marginTop={5} stickyHead>
                     <TableHead>
                         <TableRow>
                             <TableCell>Entity</TableCell>
@@ -95,8 +97,8 @@ const OrderList: React.FC<IOrderLisProps> = ({ orderList, isOrderListEmpty, pagi
                                 );
                             })}
                         </TableBody>}
-                </Table>}
-            </InfiniteScroll>
+                </Table>
+            </InfiniteScroll>}
 
             {/* for empty order list */}
 
