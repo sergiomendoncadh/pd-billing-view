@@ -54,12 +54,6 @@ jobs:
       - name: Deploy Billing View to Yemeksepeti Staging Environment
         run: yarn deploy --destination=stag.Yemeksepeti --use-sts
 
-      - name: Deploy Billing View to Mjam Staging Environment
-        run: yarn deploy --destination=stag.Mjam --use-sts
-
-      - name: Deploy Billing View to Damejidlo Staging Environment
-        run: yarn deploy --destination=stag.Damejidlo --use-sts
-
       - name: Remove Label After Deployment
         uses: actions-ecosystem/action-remove-labels@v1
         with:

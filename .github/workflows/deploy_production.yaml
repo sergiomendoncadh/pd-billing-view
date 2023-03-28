@@ -53,9 +53,3 @@ jobs:
 
       - name: Deploy Billing View to Yemeksepeti Production Environment
         run: yarn deploy --destination=prod.Yemeksepeti --use-sts
-
-      - name: Deploy Billing View to Mjam Production Environment
-        run: yarn deploy --destination=prod.Mjam --use-sts
-
-      - name: Deploy Billing View to Damejidlo Production Environment
-        run: yarn deploy --destination=prod.Damejidlo --use-sts
