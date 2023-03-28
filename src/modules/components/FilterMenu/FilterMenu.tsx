@@ -10,6 +10,7 @@ import {
 } from '@deliveryhero/armor-filter';
 import styles from './FilterMenu.module.css';
 import { format } from 'date-fns';
+import { formatExpectedDate } from '@utils/helper';
 
 interface IFilterMenuProps {
     filterValue: FilterConditionValueType | undefined;
@@ -26,16 +27,19 @@ const filterSchema: FilterConditionSchemaType = {
             id: 'status',
             label: 'Status',
             typeId: 'statusEnum',
+            initialValue: 'sent'
         },
         {
             id: 'startDate',
             label: 'Start Date',
             typeId: 'startDate',
+            initialValue: formatExpectedDate(new Date().toISOString())
         },
         {
             id: 'endDate',
             label: 'End Date',
             typeId: 'endDate',
+            initialValue: formatExpectedDate(new Date().toISOString())
         },
     ]
 };
