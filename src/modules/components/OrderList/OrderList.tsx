@@ -20,6 +20,7 @@ import { LoadingSpinner } from '@deliveryhero/armor-motion';
 import { ExternalLinkIcon, FileCommonTextIcon } from '@deliveryhero/armor-icons';
 import { useBaseApiContext } from '@modules/common/context';
 import { ApolloError } from '@apollo/client';
+import { STATUS_TAG } from '@utils/constants';
 
 interface IOrderLisProps {
     orderList: OrderItem[];
@@ -50,6 +51,8 @@ const OrderList: React.FC<IOrderLisProps> = ({ orderList, pagingKey, fetchNextOr
     }
 
     const isOrderListEmpty = (orderList.length == 0);
+
+    const renderStatusTag = (status: string) => <Tag type={STATUS_TAG[status]}>{status}</Tag>;
 
     return (
         <div>
@@ -83,7 +86,7 @@ const OrderList: React.FC<IOrderLisProps> = ({ orderList, pagingKey, fetchNextOr
                                             <TableCell contentAlignX='center'>{order?.entityId}</TableCell>
                                             <TableCell contentAlignX='center'>{order?.orderCode}</TableCell>
                                             <TableCell contentAlignX='center'>{order?.vendorCode}</TableCell>
-                                            <TableCell contentAlignX='center'>{order?.status}</TableCell>
+                                            <TableCell contentAlignX='center' style={{textTransform: 'capitalize'}}>{renderStatusTag(order.status ? order.status : 'failed')}</TableCell>
                                             <TableCell contentAlignX='center'>{renderBillableTag(order.isBillable ? order.isBillable : false)}</TableCell>
                                             <TableCell contentAlignX='center'>{order?.orderPlacedAt}</TableCell>
                                             <TableCell contentAlignX='center'>{order?.orderUpdatedAt}</TableCell>

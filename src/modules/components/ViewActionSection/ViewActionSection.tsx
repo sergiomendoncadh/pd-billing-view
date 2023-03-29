@@ -8,10 +8,10 @@ import styles from './ViewActionSection.module.css';
 const ViewActionSection: React.FC = () => {
     return (
         <div className={styles.viewActionSection}>
-            <Button small disabled marginRight={2}>
+            <Button small disabled marginRight={1}>
                 <FilterIcon large />
             </Button>
-            <Button small disabled marginRight={2}>
+            <Button small disabled marginRight={1}>
                 <NavigateIcon large />
             </Button>
             <Button small disabled>
