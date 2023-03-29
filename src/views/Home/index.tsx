@@ -4,17 +4,18 @@ import {
     FilterConditionValueType,
     useFilterURLStorage,
 } from '@deliveryhero/armor-filter';
-import { Container, Skeleton, Typography } from '@deliveryhero/armor';
-import styles from './HomeView.module.css';
-import { DatabaseIllustration, NoConnectionIllustration } from '@deliveryhero/armor-illustrations';
+import { Container, Typography } from '@deliveryhero/armor';
 import { useGetSummarizedDataLazyQuery } from '@modules/graphql/getSummarizedData.generated';
 import { useGetOrderListLazyQuery } from '@modules/graphql/getOrderList.generated';
-import FilterMenu from '@modules/components/FilterMenu/FilterMenu';
-import OrderList from '@modules/components/OrderList/OrderList';
 import { OrderItem, PagingKey } from '@modules/types.graphql';
 import { formatExpectedDate, getConditionValue } from '@utils/helper';
+
 import SummarizedSection from '@modules/components/SummarizedSection/SummarizedSection';
-import fi from 'date-fns/esm/locale/fi/index.js';
+import ViewActionSection from '@modules/components/ViewActionSection/ViewActionSection';
+import FilterMenu from '@modules/components/FilterMenu/FilterMenu';
+import OrderList from '@modules/components/OrderList/OrderList';
+
+import styles from './HomeView.module.css';
 
 interface IHomeView {
     baseApi: IOpsSdk;
@@ -128,15 +129,6 @@ export const HomeView: React.FC<IHomeView> = () => {
         getOrderList({ variables: { filter: filterOrderListVariables } });
     }
 
-    const renderErrorSection = () => (
-        <div className={styles.errorSection}>
-            <NoConnectionIllustration width='200px' />
-            <Typography paragraph large>Something went wrong</Typography>
-        </div>
-    );
-
-    const isOrderListEmpty = (orderSet.orders.length == 0);
-
     return (
         <Container maxWidth={"90%"}>
             <div className={styles.titleSection}>
@@ -148,14 +140,13 @@ export const HomeView: React.FC<IHomeView> = () => {
                 ordersTotalCount={sumdata ? sumdata?.summarizedData.ordersTotalCount : 0}
             />
             <FilterMenu filterValue={filterValue} setFilterValueCommon={setFilterValueCommon} />
-            {ordererror
-                ? renderErrorSection()
-                : <OrderList
-                    isOrderListEmpty={isOrderListEmpty}
-                    orderList={orderSet.orders}
-                    pagingKey={orderSet.pagingKey}
-                    fetchNextOrderSet={fetchNextOrderSet}
-                />}
+            <OrderList
+                orderList={orderSet.orders}
+                pagingKey={orderSet.pagingKey}
+                fetchNextOrderSet={fetchNextOrderSet}
+                orderError={ordererror}
+            />
+            <ViewActionSection />
         </Container>
     );
 };

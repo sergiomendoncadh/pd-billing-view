@@ -14,28 +14,42 @@ import {
 
 import { OrderItem, PagingKey } from '@modules/types.graphql';
 import styles from './OrderList.module.css';
-import { EmptyCartIllustration } from '@deliveryhero/armor-illustrations';
+import { EmptyCartIllustration, NoConnectionIllustration } from '@deliveryhero/armor-illustrations';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { LoadingSpinner } from '@deliveryhero/armor-motion';
 import { ExternalLinkIcon, FileCommonTextIcon } from '@deliveryhero/armor-icons';
+import { useBaseApiContext } from '@modules/common/context';
+import { ApolloError } from '@apollo/client';
 
 interface IOrderLisProps {
     orderList: OrderItem[];
-    isOrderListEmpty: boolean;
     pagingKey: PagingKey;
     fetchNextOrderSet: () => void;
+    orderError: ApolloError | undefined;
 }
 
-const OrderList: React.FC<IOrderLisProps> = ({ orderList, isOrderListEmpty, pagingKey, fetchNextOrderSet }) => {
+const OrderList: React.FC<IOrderLisProps> = ({ orderList, pagingKey, fetchNextOrderSet, orderError }) => {
+    const renderErrorSection = () => (
+        <div className={styles.errorSection}>
+            <NoConnectionIllustration width='200px' />
+            <Typography paragraph large>Something went wrong</Typography>
+        </div>
+    );
+    
+    if (orderError) return renderErrorSection();
+
+    const baseApi = useBaseApiContext();
     const hasMoreOrders = (pagingKey.orderCode ? pagingKey.orderCode.length > 0 : false);
 
     const renderBillableTag = (isBillable: boolean) => (<Tag type={isBillable ? 'approved' : 'denied'}>{isBillable.toString()}</Tag>);
 
     const displayOrderInfoPage = (orderCode: string) => {
-        let urlSegments = window.location.href.split('/');
-        let orderInfoUrl = `https://${window.location.host}/${urlSegments[3]}/p/ops-portal-billing#/order/${orderCode}`;
+        let countryCode = baseApi.getCountry()
+        let orderInfoUrl = `https://${window.location.host}/${countryCode}/p/ops-portal-billing#/order/${orderCode}`;
         window.open(orderInfoUrl);
     }
+
+    const isOrderListEmpty = (orderList.length == 0);
 
     return (
         <div>
@@ -100,8 +114,6 @@ const OrderList: React.FC<IOrderLisProps> = ({ orderList, isOrderListEmpty, pagi
                             </TableBody>}
                     </Table>
                 </InfiniteScroll>}
-
-            {/* for empty order list */}
 
             {isOrderListEmpty && <div className={styles.emptyOrderList}>
                 <EmptyCartIllustration width='200px' />
