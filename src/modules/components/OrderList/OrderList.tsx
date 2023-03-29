@@ -47,7 +47,7 @@ const OrderList: React.FC<IOrderLisProps> = ({ orderList, pagingKey, fetchNextOr
     const renderBillableTag = (isBillable: boolean) => (<Tag type={isBillable ? 'approved' : 'denied'}>{isBillable.toString()}</Tag>);
 
     const displayOrderInfoPage = (orderCode: string) => {
-        let countryCode = baseApi.getCountry()
+        let countryCode = baseApi.getCountry()?.code;
         let orderInfoUrl = `https://${window.location.host}/${countryCode}/p/ops-portal-billing#/order/${orderCode}`;
         window.open(orderInfoUrl);
     }
