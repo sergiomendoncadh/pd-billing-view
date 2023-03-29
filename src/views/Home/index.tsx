@@ -16,6 +16,8 @@ import FilterMenu from '@modules/components/FilterMenu/FilterMenu';
 import OrderList from '@modules/components/OrderList/OrderList';
 
 import styles from './HomeView.module.css';
+import { useBaseApiContext } from '@modules/common/context';
+import { useHandleErrors } from '@hooks/useHandleErrors';
 
 interface IHomeView {
     baseApi: IOpsSdk;
@@ -128,6 +130,8 @@ export const HomeView: React.FC<IHomeView> = () => {
         };
         getOrderList({ variables: { filter: filterOrderListVariables } });
     }
+
+    if (sumerror || ordererror) useHandleErrors(sumerror ? sumerror : ordererror);
 
     return (
         <Container maxWidth={"90%"}>
