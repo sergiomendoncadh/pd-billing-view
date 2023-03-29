@@ -11,6 +11,8 @@ interface ICardSectionProps {
 }
 
 const SummarizedSection: React.FC<ICardSectionProps> = ({ ordersTotalCount, ordersFailedPercentage, ordersSentCount }) => {
+    const [selectedCard, setSelectedCard] = React.useState();
+
     return (
         <div className={styles.summarizedSection}>
             <div className={styles.cardSection}>
@@ -37,7 +39,7 @@ const SummarizedSection: React.FC<ICardSectionProps> = ({ ordersTotalCount, orde
 
             <div className={styles.informationSection}>
                 <DatabaseIllustration width='150px' marginRight={10} />
-                <Typography paragraph>Select the data tiles to apply specific filters</Typography>
+                {/* <Typography paragraph>Select the data tiles to apply specific filters</Typography> */}
             </div>
         </div>
     );
