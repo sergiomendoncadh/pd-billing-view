@@ -1,5 +1,3 @@
-/* card section */
-
 .summarizedSection {
     display: flex;
 }
@@ -34,28 +32,7 @@
     opacity: 0.4;
 }
 
-/* filter menu */
-
-.filterSection {
-    padding: 15px 30px;
-}
-
-/* empty order list */
-
-.titleSection {
-    border-bottom: 1px solid lightgray;
-    padding-left: 20px;
-}
-
-.orderListSection {
-    /* this is subject to change */
-    height: 700px;       
-    overflow-y: scroll;   
-}
-
-.errorSection {
+.informationSection {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    margin-top: 55px;
 }

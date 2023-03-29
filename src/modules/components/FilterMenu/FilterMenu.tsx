@@ -3,14 +3,13 @@ import {
     FilterConditionValueType,
     FilterEditor,
     FilterLayout,
-    useFilterURLStorage,
-    FilterEnumConditionType,
     FilterConditionSchemaType,
-    FilterDateConditionType
+    FilterEnumConditionType,
+    FilterDateConditionType,
 } from '@deliveryhero/armor-filter';
 import styles from './FilterMenu.module.css';
-import { format } from 'date-fns';
 import { formatExpectedDate } from '@utils/helper';
+import { format } from 'date-fns';
 
 interface IFilterMenuProps {
     filterValue: FilterConditionValueType | undefined;
@@ -51,6 +50,7 @@ const conditionTypes = [
             { label: 'Sent', value: 'sent' },
             { label: 'Cancelled', value: 'cancelled' },
             { label: 'Failed', value: 'failed' },
+            { label: 'Skipped', value: 'skipped' },
         ],
     }),
     FilterDateConditionType.create('startDate', {

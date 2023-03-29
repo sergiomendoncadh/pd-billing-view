@@ -4,15 +4,17 @@ import {
     FilterConditionValueType,
     useFilterURLStorage,
 } from '@deliveryhero/armor-filter';
-import { Container, Typography } from '@deliveryhero/armor';
+import { Container, Skeleton, Typography } from '@deliveryhero/armor';
 import styles from './HomeView.module.css';
-import { DatabaseIllustration } from '@deliveryhero/armor-illustrations';
+import { DatabaseIllustration, NoConnectionIllustration } from '@deliveryhero/armor-illustrations';
 import { useGetSummarizedDataLazyQuery } from '@modules/graphql/getSummarizedData.generated';
 import { useGetOrderListLazyQuery } from '@modules/graphql/getOrderList.generated';
 import FilterMenu from '@modules/components/FilterMenu/FilterMenu';
 import OrderList from '@modules/components/OrderList/OrderList';
 import { OrderItem, PagingKey } from '@modules/types.graphql';
 import { formatExpectedDate, getConditionValue } from '@utils/helper';
+import SummarizedSection from '@modules/components/SummarizedSection/SummarizedSection';
+import fi from 'date-fns/esm/locale/fi/index.js';
 
 interface IHomeView {
     baseApi: IOpsSdk;
@@ -36,37 +38,49 @@ export const HomeView: React.FC<IHomeView> = () => {
     const [getSummarizedData, { data: sumdata, loading: sumloading, error: sumerror }] = useGetSummarizedDataLazyQuery();
     const [getOrderList, { data: orderdata, loading: orderloading, error: ordererror }] = useGetOrderListLazyQuery();
 
-    console.log(orderSet);
-
     // handle initial state
     React.useEffect(() => {
         // set default values
         let initialDate = formatExpectedDate(new Date().toISOString()),
-            initialState = (getConditionValue(filterValue?.conditions, 'startDate').length == 0 || getConditionValue(filterValue?.conditions, 'endDate').length == 0),
+            initialState = (getConditionValue(filterValue?.conditions, 'startDate')?.length == 0 || getConditionValue(filterValue?.conditions, 'endDate')?.length == 0),
             currentStatus = getConditionValue(filterValue?.conditions, 'status'),
             currentSearchTerm = getConditionValue(filterValue?.conditions, 'search');
 
-        getSummarizedData({
-            variables: {
-                filter: {
-                    startDate: initialState ? initialDate : getConditionValue(filterValue?.conditions, 'startDate'),
-                    endDate: initialState ? initialDate : getConditionValue(filterValue?.conditions, 'endDate'),
+        const initialFilterValue = {
+            conditions: [
+                {
+                    id: "startDate",
+                    name: "startDate",
+                    value: initialDate,
+                },
+                {
+                    id: "endDate",
+                    name: "endDate",
+                    value: initialDate,
+                },
+                {
+                    id: "status",
+                    name: "status",
+                    value: 'sent',
                 }
-            }
-        });
+            ]
+        };
+        const filterSummarizedVariables = {
+            startDate: initialState ? initialDate : getConditionValue(filterValue?.conditions, 'startDate'),
+            endDate: initialState ? initialDate : getConditionValue(filterValue?.conditions, 'endDate'),
+        };
+        const filterOrderListVariables = {
+            ...filterSummarizedVariables,
+            searchTerm: currentSearchTerm?.length == 0 ? '' : currentSearchTerm,
+            status: currentStatus?.length == 0 ? 'sent' : currentStatus,
+            lastEvaluatedKey: {},
+        }
 
-        getOrderList({
-            variables: {
-                filter: {
-                    startDate: initialState ? initialDate : getConditionValue(filterValue?.conditions, 'endDate'),
-                    endDate: initialState ? initialDate : getConditionValue(filterValue?.conditions, 'endDate'),
-                    searchTerm: currentSearchTerm?.length == 0 ? '' : currentSearchTerm,
-                    status: currentStatus?.length == 0 ? 'sent' : currentStatus,
-                    lastEvaluatedKey: {},
-                }
-            },
-            fetchPolicy: "no-cache",
-        });
+        setStoredValue(initialFilterValue);
+        setFilterValue(initialFilterValue);
+
+        getSummarizedData({ variables: { filter: filterSummarizedVariables } });
+        getOrderList({ variables: { filter: filterOrderListVariables }, fetchPolicy: "no-cache" });
     }, []);
 
     React.useEffect(() => {
@@ -79,51 +93,47 @@ export const HomeView: React.FC<IHomeView> = () => {
         }
     }, [orderdata])
 
-    const setFilterValueCommon: any = React.useCallback(
+    const setFilterValueCommon = React.useCallback(
         (value: FilterConditionValueType) => {
             setStoredValue(value);
             setFilterValue(value);
             setOrderSet(initialOrderSet);
 
-            getSummarizedData({
-                variables: {
-                    filter: {
-                        startDate: getConditionValue(value?.conditions, 'startDate'),
-                        endDate: getConditionValue(value?.conditions, 'endDate'),
-                    }
-                },
-            });
+            // set filter variables
+            const filterSummarizedVariables = {
+                startDate: getConditionValue(value?.conditions, 'startDate'),
+                endDate: getConditionValue(value?.conditions, 'endDate'),
+            };
+            const filterOrderListVariables = {
+                ...filterSummarizedVariables,
+                status: getConditionValue(value?.conditions, 'status'),
+                lastEvaluatedKey: {},
+                searchTerm: getConditionValue(value?.conditions, 'search'),
+            };
 
-            // call for updating the order list
-            getOrderList({
-                variables: {
-                    filter: {
-                        startDate: getConditionValue(value?.conditions, 'startDate'),
-                        endDate: getConditionValue(value?.conditions, 'endDate'),
-                        status: getConditionValue(value?.conditions, 'status'),
-                        lastEvaluatedKey: {},
-                        searchTerm: getConditionValue(value?.conditions, 'search')
-                    }
-                },
-                fetchPolicy: "no-cache",
-            });
+            getSummarizedData({ variables: { filter: filterSummarizedVariables }, });
+            getOrderList({ variables: { filter: filterOrderListVariables }, fetchPolicy: "no-cache" });
         },
         [setStoredValue, setFilterValue],
     );
 
     const fetchNextOrderSet = () => {
-        getOrderList({
-            variables: {
-                filter: {
-                    startDate: getConditionValue(filterValue?.conditions, 'startDate'),
-                    endDate: getConditionValue(filterValue?.conditions, 'endDate'),
-                    status: getConditionValue(filterValue?.conditions, 'status'),
-                    lastEvaluatedKey: { ...orderSet.pagingKey },
-                    searchTerm: getConditionValue(filterValue?.conditions, 'search')
-                }
-            }
-        });
+        const filterOrderListVariables = {
+            startDate: getConditionValue(filterValue?.conditions, 'startDate'),
+            endDate: getConditionValue(filterValue?.conditions, 'endDate'),
+            status: getConditionValue(filterValue?.conditions, 'status'),
+            lastEvaluatedKey: { ...orderSet.pagingKey },
+            searchTerm: getConditionValue(filterValue?.conditions, 'search')
+        };
+        getOrderList({ variables: { filter: filterOrderListVariables } });
     }
+
+    const renderErrorSection = () => (
+        <div className={styles.errorSection}>
+            <NoConnectionIllustration width='200px' />
+            <Typography paragraph large>Something went wrong</Typography>
+        </div>
+    );
 
     const isOrderListEmpty = (orderSet.orders.length == 0);
 
@@ -132,42 +142,20 @@ export const HomeView: React.FC<IHomeView> = () => {
             <div className={styles.titleSection}>
                 <Typography sectionTitle>Billing View</Typography>
             </div>
-            <div className={styles.summarizedSection}>
-                <div className={styles.cardSection}>
-                    <div className={styles.cardContainer}>
-                        <Typography className={styles.cardLabel} label medium>Orders in Billing</Typography>
-                        <div className={styles.cardDataSet}>
-                            <Typography pageTitle>{sumdata?.summarizedData.ordersTotalCount}</Typography>
-                        </div>
-                    </div>
-                    <div className={styles.cardContainer}>
-                        <Typography className={styles.cardLabel} label medium>Orders Failed to Be Sent to SAP</Typography>
-                        <div className={styles.cardDataSet}>
-                            <Typography pageTitle>{sumdata?.summarizedData.ordersFailedPercentage}</Typography>
-                            <Typography sectionTitle>%</Typography>
-                        </div>
-                    </div>
-                    <div className={styles.cardContainer}>
-                        <Typography className={styles.cardLabel} label medium>Orders Sent to SAP</Typography>
-                        <div className={styles.cardDataSet}>
-                            <Typography pageTitle>{sumdata?.summarizedData.ordersSentCount}</Typography>
-                        </div>
-                    </div>
-                </div>
-
-                <div className={styles.informationSection}>
-                    <DatabaseIllustration width='150px' marginRight={10} />
-                    <Typography paragraph>Select the data tiles to apply specific filters</Typography>
-                </div>
-            </div>
-
-            <FilterMenu filterValue={filterValue} setFilterValueCommon={setFilterValueCommon} />
-            <OrderList
-                isOrderListEmpty={isOrderListEmpty}
-                orderList={orderSet.orders}
-                pagingKey={orderSet.pagingKey}
-                fetchNextOrderSet={fetchNextOrderSet}
+            <SummarizedSection
+                ordersFailedPercentage={sumdata ? sumdata?.summarizedData.ordersFailedPercentage : 0}
+                ordersSentCount={sumdata ? sumdata?.summarizedData.ordersSentCount : 0}
+                ordersTotalCount={sumdata ? sumdata?.summarizedData.ordersTotalCount : 0}
             />
+            <FilterMenu filterValue={filterValue} setFilterValueCommon={setFilterValueCommon} />
+            {ordererror
+                ? renderErrorSection()
+                : <OrderList
+                    isOrderListEmpty={isOrderListEmpty}
+                    orderList={orderSet.orders}
+                    pagingKey={orderSet.pagingKey}
+                    fetchNextOrderSet={fetchNextOrderSet}
+                />}
         </Container>
     );
 };
