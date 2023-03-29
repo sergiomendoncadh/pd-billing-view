@@ -145,6 +145,7 @@ export const HomeView: React.FC<IHomeView> = () => {
                 pagingKey={orderSet.pagingKey}
                 fetchNextOrderSet={fetchNextOrderSet}
                 orderError={ordererror}
+                orderLoading={orderloading}
             />
             <ViewActionSection />
         </Container>

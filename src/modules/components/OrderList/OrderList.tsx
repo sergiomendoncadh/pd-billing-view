@@ -10,6 +10,7 @@ import {
     Box,
     TableAction,
     Tooltip,
+    Skeleton,
 } from '@deliveryhero/armor';
 
 import { OrderItem, PagingKey } from '@modules/types.graphql';
@@ -27,16 +28,17 @@ interface IOrderLisProps {
     pagingKey: PagingKey;
     fetchNextOrderSet: () => void;
     orderError: ApolloError | undefined;
+    orderLoading: boolean;
 }
 
-const OrderList: React.FC<IOrderLisProps> = ({ orderList, pagingKey, fetchNextOrderSet, orderError }) => {
+const OrderList: React.FC<IOrderLisProps> = ({ orderList, pagingKey, fetchNextOrderSet, orderError, orderLoading }) => {
     const renderErrorSection = () => (
         <div className={styles.errorSection}>
             <NoConnectionIllustration width='200px' />
             <Typography paragraph large>Something went wrong</Typography>
         </div>
     );
-    
+
     if (orderError) return renderErrorSection();
 
     const baseApi = useBaseApiContext();
@@ -54,12 +56,21 @@ const OrderList: React.FC<IOrderLisProps> = ({ orderList, pagingKey, fetchNextOr
 
     const renderStatusTag = (status: string) => <Tag type={STATUS_TAG[status]}>{status}</Tag>;
 
+    const singleRowLoader = () => {
+        let singleRow = [];
+        for (let i = 0; i < 8; i++) {
+            singleRow.push(<TableCell contentAlignX='center'><Skeleton width='100%' /></TableCell>);
+        }
+
+        return singleRowLoader;
+    }
+
     return (
         <div>
             {!isOrderListEmpty &&
                 <InfiniteScroll
                     dataLength={orderList?.length}
-                    loader={hasMoreOrders && <Box className={styles.spinner}><LoadingSpinner width='100px' secondary /></Box>}
+                    loader={hasMoreOrders && singleRowLoader()}
                     hasMore={hasMoreOrders}
                     next={fetchNextOrderSet}
                     height={700}
@@ -86,7 +97,7 @@ const OrderList: React.FC<IOrderLisProps> = ({ orderList, pagingKey, fetchNextOr
                                             <TableCell contentAlignX='center'>{order?.entityId}</TableCell>
                                             <TableCell contentAlignX='center'>{order?.orderCode}</TableCell>
                                             <TableCell contentAlignX='center'>{order?.vendorCode}</TableCell>
-                                            <TableCell contentAlignX='center' style={{textTransform: 'capitalize'}}>{renderStatusTag(order.status ? order.status : 'failed')}</TableCell>
+                                            <TableCell contentAlignX='center' style={{ textTransform: 'capitalize' }}>{renderStatusTag(order.status ? order.status : 'failed')}</TableCell>
                                             <TableCell contentAlignX='center'>{renderBillableTag(order.isBillable ? order.isBillable : false)}</TableCell>
                                             <TableCell contentAlignX='center'>{order?.orderPlacedAt}</TableCell>
                                             <TableCell contentAlignX='center'>{order?.orderUpdatedAt}</TableCell>
@@ -118,7 +129,7 @@ const OrderList: React.FC<IOrderLisProps> = ({ orderList, pagingKey, fetchNextOr
                     </Table>
                 </InfiniteScroll>}
 
-            {isOrderListEmpty && <div className={styles.emptyOrderList}>
+            {!orderLoading && isOrderListEmpty && <div className={styles.emptyOrderList}>
                 <EmptyCartIllustration width='200px' />
                 <Typography paragraph large>No orders to show</Typography>
                 <Typography paragraph>Change your filters or check if the order code is correct</Typography>
