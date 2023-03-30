@@ -124,13 +124,13 @@ export const HomeView: React.FC<IHomeView> = () => {
     }
 
     if (sumerror) {
-        baseApi.alert.set("Summarized data failed to load", {
+        baseApi.alert.set("[Request Error] Summarized data failed to load", {
             variant: "error"
         });
     }
 
     if (ordererror) {
-        baseApi.alert.set("Order list data failed to load", {
+        baseApi.alert.set("[Request Error] Order list data failed to load", {
             variant: "error"
         });
     }
