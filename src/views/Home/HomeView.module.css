@@ -52,10 +52,3 @@
     height: 700px;       
     overflow-y: scroll;   
 }
-
-.errorSection {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 55px;
-}

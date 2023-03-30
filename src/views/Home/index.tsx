@@ -1,5 +1,4 @@
 import React from 'react';
-import { IOpsSdk } from '@deliveryhero/opsportal';
 import {
     FilterConditionValueType,
     useFilterURLStorage,
@@ -7,7 +6,7 @@ import {
 import { Container, Typography } from '@deliveryhero/armor';
 import { useGetSummarizedDataLazyQuery } from '@modules/graphql/getSummarizedData.generated';
 import { useGetOrderListLazyQuery } from '@modules/graphql/getOrderList.generated';
-import { OrderItem, PagingKey } from '@modules/types.graphql';
+import { OrderItem } from '@modules/types.graphql';
 import { formatExpectedDate, getConditionValue } from '@utils/helper';
 
 import SummarizedSection from '@modules/components/SummarizedSection/SummarizedSection';
@@ -16,40 +15,8 @@ import OrderList from '@modules/components/OrderList/OrderList';
 
 import styles from './HomeView.module.css';
 import { useBaseApiContext } from '@modules/common/context';
+import { IHomeView, initialFilterValue, initialOrderSet, IOrderSet } from './types';
 
-interface IHomeView {
-    baseApi: IOpsSdk;
-};
-
-interface IOrderSet {
-    orders: OrderItem[];
-    pagingKey: PagingKey;
-};
-
-const initialOrderSet: IOrderSet = {
-    orders: [],
-    pagingKey: {},
-};
-
-const initialFilterValue = {
-    conditions: [
-        {
-            id: "startDate",
-            name: "startDate",
-            value: formatExpectedDate(new Date().toISOString()),
-        },
-        {
-            id: "endDate",
-            name: "endDate",
-            value: formatExpectedDate(new Date().toISOString()),
-        },
-        {
-            id: "status",
-            name: "status",
-            value: 'sent',
-        }
-    ]
-};
 
 export const HomeView: React.FC<IHomeView> = () => {
     const baseApi = useBaseApiContext();
@@ -115,15 +82,20 @@ export const HomeView: React.FC<IHomeView> = () => {
     );
 
     const handleFilterUpdates = (value: FilterConditionValueType) => {
+        // handle filter updates 
+        let startDate = getConditionValue(value?.conditions, 'startDate'),
+            endDate = getConditionValue(value?.conditions, 'endDate');
+
+        if (new Date(endDate) < new Date(startDate)) {
+            return baseApi.alert.set('[Validation] End date cannot be lower than start date', { variant: 'error' });
+        }
+
         setStoredValue(value);
         setFilterValue(value);
         setOrderSet(initialOrderSet);
 
         // set filter variables
-        const filterSummarizedVariables = {
-            startDate: getConditionValue(value?.conditions, 'startDate'),
-            endDate: getConditionValue(value?.conditions, 'endDate'),
-        };
+        const filterSummarizedVariables = { startDate, endDate };
         const filterOrderListVariables = {
             ...filterSummarizedVariables,
             status: getConditionValue(value?.conditions, 'status'),
