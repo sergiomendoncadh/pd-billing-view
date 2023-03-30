@@ -17,11 +17,11 @@ import { OrderItem, PagingKey } from '@modules/types.graphql';
 import styles from './OrderList.module.css';
 import { EmptyCartIllustration, NoConnectionIllustration } from '@deliveryhero/armor-illustrations';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { LoadingSpinner } from '@deliveryhero/armor-motion';
 import { ExternalLinkIcon, FileCommonTextIcon } from '@deliveryhero/armor-icons';
 import { useBaseApiContext } from '@modules/common/context';
 import { ApolloError } from '@apollo/client';
 import { STATUS_TAG } from '@utils/constants';
+import ViewActionSection from '@modules/components/ViewActionSection/ViewActionSection';
 
 interface IOrderLisProps {
     orderList: OrderItem[];
@@ -66,13 +66,13 @@ const OrderList: React.FC<IOrderLisProps> = ({ orderList, pagingKey, fetchNextOr
     }
 
     return (
-        <div>
+        <div className={styles.orderListSection}>
             {!isOrderListEmpty &&
                 <InfiniteScroll
                     dataLength={orderList?.length}
                     loader={hasMoreOrders && singleRowLoader()}
                     hasMore={hasMoreOrders}
-                    next={fetchNextOrderSet}
+                    next={() => fetchNextOrderSet()}
                     height={700}
                     style={{ overflowY: 'scroll' }}
                 >
@@ -134,6 +134,8 @@ const OrderList: React.FC<IOrderLisProps> = ({ orderList, pagingKey, fetchNextOr
                 <Typography paragraph large>No orders to show</Typography>
                 <Typography paragraph>Change your filters or check if the order code is correct</Typography>
             </div>}
+
+            <ViewActionSection />
         </div>
     );
 }

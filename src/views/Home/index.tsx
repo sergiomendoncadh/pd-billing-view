@@ -11,7 +11,6 @@ import { OrderItem, PagingKey } from '@modules/types.graphql';
 import { formatExpectedDate, getConditionValue } from '@utils/helper';
 
 import SummarizedSection from '@modules/components/SummarizedSection/SummarizedSection';
-import ViewActionSection from '@modules/components/ViewActionSection/ViewActionSection';
 import FilterMenu from '@modules/components/FilterMenu/FilterMenu';
 import OrderList from '@modules/components/OrderList/OrderList';
 
@@ -34,6 +33,7 @@ const initialOrderSet: IOrderSet = {
 }
 
 export const HomeView: React.FC<IHomeView> = () => {
+    const baseApi = useBaseApiContext();
     const [storedValue, setStoredValue] = useFilterURLStorage('filterA');
     const [filterValue, setFilterValue] = React.useState<FilterConditionValueType | undefined>(storedValue);
     const [orderSet, setOrderSet] = React.useState<IOrderSet>(initialOrderSet);
@@ -87,10 +87,20 @@ export const HomeView: React.FC<IHomeView> = () => {
     }, []);
 
     React.useEffect(() => {
+        console.log('order data', orderdata);
         if (orderdata?.billingViewOrderList.orders) {
+            let finalOrderSet: OrderItem[] = [];
+
+            // handle duplication of orders 
+            ([...orderSet.orders, ...orderdata?.billingViewOrderList.orders as OrderItem[]]).map((order) => {
+                if (finalOrderSet.findIndex((el) => el.orderCode == order.orderCode) == -1) {
+                    finalOrderSet.push(order);
+                }
+            })
+
             setOrderSet({
                 ...orderSet,
-                orders: [...orderSet.orders, ...orderdata?.billingViewOrderList.orders as OrderItem[]],
+                orders: finalOrderSet,
                 pagingKey: { ...orderdata.billingViewOrderList.pagingKey },
             })
         }
@@ -131,7 +141,17 @@ export const HomeView: React.FC<IHomeView> = () => {
         getOrderList({ variables: { filter: filterOrderListVariables } });
     }
 
-    if (sumerror || ordererror) useHandleErrors(sumerror ? sumerror : ordererror);
+    if (sumerror) {
+        baseApi.alert.set("Summarized data failed to load", {
+            variant: "error"
+        });
+    }
+
+    if (ordererror) {
+        baseApi.alert.set("Order list data failed to load", {
+            variant: "error"
+        });
+    }
 
     return (
         <Container maxWidth={"90%"}>
@@ -151,7 +171,6 @@ export const HomeView: React.FC<IHomeView> = () => {
                 orderError={ordererror}
                 orderLoading={orderloading}
             />
-            <ViewActionSection />
         </Container>
     );
 };

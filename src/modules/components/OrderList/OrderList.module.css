@@ -1,7 +1,6 @@
 .orderListSection {
-    /* this is subject to change */
-    height: 700px;       
-    overflow-y: scroll;   
+  position: relative;
+  border-bottom: 1px solid lightgray;
 }
 
 .emptyOrderList {
