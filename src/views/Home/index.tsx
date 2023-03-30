@@ -16,27 +16,47 @@ import OrderList from '@modules/components/OrderList/OrderList';
 
 import styles from './HomeView.module.css';
 import { useBaseApiContext } from '@modules/common/context';
-import { useHandleErrors } from '@hooks/useHandleErrors';
 
 interface IHomeView {
     baseApi: IOpsSdk;
-}
+};
 
 interface IOrderSet {
     orders: OrderItem[];
     pagingKey: PagingKey;
-}
+};
 
 const initialOrderSet: IOrderSet = {
     orders: [],
     pagingKey: {},
-}
+};
+
+const initialFilterValue = {
+    conditions: [
+        {
+            id: "startDate",
+            name: "startDate",
+            value: formatExpectedDate(new Date().toISOString()),
+        },
+        {
+            id: "endDate",
+            name: "endDate",
+            value: formatExpectedDate(new Date().toISOString()),
+        },
+        {
+            id: "status",
+            name: "status",
+            value: 'sent',
+        }
+    ]
+};
 
 export const HomeView: React.FC<IHomeView> = () => {
     const baseApi = useBaseApiContext();
     const [storedValue, setStoredValue] = useFilterURLStorage('filterA');
     const [filterValue, setFilterValue] = React.useState<FilterConditionValueType | undefined>(storedValue);
     const [orderSet, setOrderSet] = React.useState<IOrderSet>(initialOrderSet);
+    const getCountryValue = baseApi.getCountry()?.code;
 
     const [getSummarizedData, { data: sumdata, loading: sumloading, error: sumerror }] = useGetSummarizedDataLazyQuery();
     const [getOrderList, { data: orderdata, loading: orderloading, error: ordererror }] = useGetOrderListLazyQuery();
@@ -49,25 +69,6 @@ export const HomeView: React.FC<IHomeView> = () => {
             currentStatus = getConditionValue(filterValue?.conditions, 'status'),
             currentSearchTerm = getConditionValue(filterValue?.conditions, 'search');
 
-        const initialFilterValue = {
-            conditions: [
-                {
-                    id: "startDate",
-                    name: "startDate",
-                    value: initialDate,
-                },
-                {
-                    id: "endDate",
-                    name: "endDate",
-                    value: initialDate,
-                },
-                {
-                    id: "status",
-                    name: "status",
-                    value: 'sent',
-                }
-            ]
-        };
         const filterSummarizedVariables = {
             startDate: initialState ? initialDate : getConditionValue(filterValue?.conditions, 'startDate'),
             endDate: initialState ? initialDate : getConditionValue(filterValue?.conditions, 'endDate'),
@@ -79,15 +80,17 @@ export const HomeView: React.FC<IHomeView> = () => {
             lastEvaluatedKey: {},
         }
 
-        setStoredValue(initialFilterValue);
-        setFilterValue(initialFilterValue);
+        // update local filter states only if stored state is empty
+        if (!storedValue) {
+            setStoredValue(initialFilterValue);
+            setFilterValue(initialFilterValue);
+        }
 
         getSummarizedData({ variables: { filter: filterSummarizedVariables } });
         getOrderList({ variables: { filter: filterOrderListVariables }, fetchPolicy: "no-cache" });
     }, []);
 
     React.useEffect(() => {
-        console.log('order data', orderdata);
         if (orderdata?.billingViewOrderList.orders) {
             let finalOrderSet: OrderItem[] = [];
 
@@ -104,31 +107,38 @@ export const HomeView: React.FC<IHomeView> = () => {
                 pagingKey: { ...orderdata.billingViewOrderList.pagingKey },
             })
         }
-    }, [orderdata])
+    }, [orderdata]);
 
     const setFilterValueCommon = React.useCallback(
-        (value: FilterConditionValueType) => {
-            setStoredValue(value);
-            setFilterValue(value);
-            setOrderSet(initialOrderSet);
-
-            // set filter variables
-            const filterSummarizedVariables = {
-                startDate: getConditionValue(value?.conditions, 'startDate'),
-                endDate: getConditionValue(value?.conditions, 'endDate'),
-            };
-            const filterOrderListVariables = {
-                ...filterSummarizedVariables,
-                status: getConditionValue(value?.conditions, 'status'),
-                lastEvaluatedKey: {},
-                searchTerm: getConditionValue(value?.conditions, 'search'),
-            };
-
-            getSummarizedData({ variables: { filter: filterSummarizedVariables }, });
-            getOrderList({ variables: { filter: filterOrderListVariables }, fetchPolicy: "no-cache" });
-        },
-        [setStoredValue, setFilterValue],
+        (value: FilterConditionValueType) => handleFilterUpdates(value),
+        [setStoredValue, setFilterValue, getCountryValue],
     );
+
+    const handleFilterUpdates = (value: FilterConditionValueType) => {
+        setStoredValue(value);
+        setFilterValue(value);
+        setOrderSet(initialOrderSet);
+
+        // set filter variables
+        const filterSummarizedVariables = {
+            startDate: getConditionValue(value?.conditions, 'startDate'),
+            endDate: getConditionValue(value?.conditions, 'endDate'),
+        };
+        const filterOrderListVariables = {
+            ...filterSummarizedVariables,
+            status: getConditionValue(value?.conditions, 'status'),
+            lastEvaluatedKey: {},
+            searchTerm: getConditionValue(value?.conditions, 'search'),
+        };
+
+        getSummarizedData({ variables: { filter: filterSummarizedVariables }, });
+        getOrderList({ variables: { filter: filterOrderListVariables }, fetchPolicy: "no-cache" });
+    }
+
+    // handle country changes
+    React.useEffect(() => {
+        if (filterValue) handleFilterUpdates(filterValue);
+    }, [baseApi.getCountry()]);
 
     const fetchNextOrderSet = () => {
         const filterOrderListVariables = {
