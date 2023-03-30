@@ -99,8 +99,8 @@ const OrderList: React.FC<IOrderLisProps> = ({ orderList, pagingKey, fetchNextOr
                                             <TableCell contentAlignX='center'>{order?.vendorCode}</TableCell>
                                             <TableCell contentAlignX='center' style={{ textTransform: 'capitalize' }}>{renderStatusTag(order.status ? order.status : 'failed')}</TableCell>
                                             <TableCell contentAlignX='center'>{renderBillableTag(order.isBillable ? order.isBillable : false)}</TableCell>
-                                            <TableCell contentAlignX='center'>{order?.orderPlacedAt}</TableCell>
-                                            <TableCell contentAlignX='center'>{order?.orderUpdatedAt}</TableCell>
+                                            <TableCell contentAlignX='center'>{order?.orderPlacedAt && new Date(order?.orderPlacedAt).toISOString()}</TableCell>
+                                            <TableCell contentAlignX='center'>{order?.orderUpdatedAt && new Date(order?.orderUpdatedAt).toISOString()}</TableCell>
                                             <TableCell contentAlignX='center'>
                                                 <Box
                                                     style={{

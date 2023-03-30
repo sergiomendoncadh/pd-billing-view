@@ -23,9 +23,9 @@ module.exports = {
   build: {
     entryFile: './src/index.tsx',
     outputDir: 'dist/',
-    outputFileName: 'your-plugin.[chunkhash].js',
-    libraryName: 'YourPlugin',
-    webpackManifestFileName: 'your-plugin-manifest.json'
+    outputFileName: 'ops-portal-billing-view.[chunkhash].js',
+    libraryName: 'Billing View',
+    webpackManifestFileName: 'ops-portal-billing-view-manifest.json'
   },
   settings: {
     useConfig: false, // set to false to disable the plugin configuration. json files are by convention in folder `config`
