@@ -23,7 +23,7 @@ const SummarizedSection: React.FC<ICardSectionProps> = ({ ordersTotalCount, orde
                     </div>
                 </div>
                 <div className={styles.cardContainer}>
-                    <Typography className={styles.cardLabel} label medium>Orders Failed to Be Sent to SAP</Typography>
+                    <Typography className={styles.cardLabel} label medium>Orders Not Sent to SAP</Typography>
                     <div className={styles.cardDataSet}>
                         <Typography pageTitle>{ordersFailedPercentage}</Typography>
                         <Typography sectionTitle>%</Typography>
@@ -39,7 +39,6 @@ const SummarizedSection: React.FC<ICardSectionProps> = ({ ordersTotalCount, orde
 
             <div className={styles.informationSection}>
                 <DatabaseIllustration width='150px' marginRight={10} />
-                {/* <Typography paragraph>Select the data tiles to apply specific filters</Typography> */}
             </div>
         </div>
     );

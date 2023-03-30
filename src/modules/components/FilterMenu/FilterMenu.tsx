@@ -20,7 +20,7 @@ const filterSchema: FilterConditionSchemaType = {
     conditions: [
         {
             id: 'search',
-            label: 'Search Orders',
+            label: 'Order Code',
         },
         {
             id: 'status',
